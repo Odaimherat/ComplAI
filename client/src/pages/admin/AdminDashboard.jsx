@@ -9,13 +9,14 @@ import {
   updateLeadStatus,
   getNewsletterSignups,
   getSubscriptions,
+  getAuditLog,
 } from "../../lib/adminApi";
 import { Section } from "../../components/ui/Section";
 import StatusPill from "../../components/ui/StatusPill";
 import BarChart from "../../components/ui/charts/BarChart";
 import LineChart from "../../components/ui/charts/LineChart";
 
-const TABS = ["Overview", "Leads", "Newsletter", "Subscriptions"];
+const TABS = ["Overview", "Leads", "Newsletter", "Subscriptions", "Audit Log"];
 
 const LEAD_STATUS_TO_PILL = { new: "warn", contacted: "pass", closed: "fail" };
 
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
   const [leads, setLeads] = useState([]);
   const [newsletter, setNewsletter] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [auditLog, setAuditLog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -67,6 +69,10 @@ export default function AdminDashboard() {
       if (nextTab === "Subscriptions" && subscriptions.length === 0) {
         const data = await getSubscriptions();
         setSubscriptions(data.subscriptions || []);
+      }
+      if (nextTab === "Audit Log" && auditLog.length === 0) {
+        const data = await getAuditLog();
+        setAuditLog(data.entries || []);
       }
     } catch (err) {
       setError(err.message);
@@ -214,6 +220,39 @@ export default function AdminDashboard() {
               ))}
               {subscriptions.length === 0 && (
                 <tr><td colSpan={5} className="py-6 text-center text-[var(--color-text-faint)]">No subscriptions yet.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {tab === "Audit Log" && (
+        <div className="card p-6 overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[var(--color-border)] text-left text-xs font-mono uppercase tracking-wide text-[var(--color-text-faint)]">
+                <th className="py-2 pe-4">Action</th>
+                <th className="py-2 pe-4">Detail</th>
+                <th className="py-2 pe-4">IP</th>
+                <th className="py-2">When</th>
+              </tr>
+            </thead>
+            <tbody>
+              {auditLog.map((entry) => (
+                <tr key={entry._id} className="border-b border-[var(--color-border)]">
+                  <td className="py-2 pe-4">
+                    <StatusPill
+                      status={entry.action === "login_failure" ? "fail" : entry.action === "login_success" ? "pass" : "warn"}
+                      label={entry.action.replace(/_/g, " ")}
+                    />
+                  </td>
+                  <td className="py-2 pe-4 text-[var(--color-text-muted)]">{entry.detail}</td>
+                  <td className="py-2 pe-4 font-mono text-xs text-[var(--color-text-faint)]">{entry.ip}</td>
+                  <td className="py-2 text-[var(--color-text-muted)]">{new Date(entry.createdAt).toLocaleString()}</td>
+                </tr>
+              ))}
+              {auditLog.length === 0 && (
+                <tr><td colSpan={4} className="py-6 text-center text-[var(--color-text-faint)]">No audit entries yet.</td></tr>
               )}
             </tbody>
           </table>

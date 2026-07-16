@@ -73,3 +73,7 @@ export function getNewsletterSignups() {
 export function getSubscriptions() {
   return adminRequest("/subscriptions");
 }
+
+export function getAuditLog() {
+  return adminRequest("/audit-log");
+}
