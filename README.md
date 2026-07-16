@@ -11,7 +11,8 @@ React, Node) with a working backend, a rule-based AI assistant, and no paid
 APIs or services anywhere in the stack.
 
 
-##Images 
+## Images
+
 <img width="1902" height="910" alt="image" src="https://github.com/user-attachments/assets/6a24629c-7154-40b3-b780-1bdc69a3d339" />
 
 <img width="1911" height="897" alt="image" src="https://github.com/user-attachments/assets/bfc82d64-8824-4b25-98ef-4713234f9476" />
