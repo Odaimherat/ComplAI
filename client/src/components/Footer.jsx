@@ -74,6 +74,7 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-[var(--color-text-muted)]">
             <li><Link to="/about" className="hover:text-[var(--color-text)] transition-colors">{t("nav.about")}</Link></li>
             <li><Link to="/case-studies" className="hover:text-[var(--color-text)] transition-colors">{t("footer.caseStudies")}</Link></li>
+            <li><Link to="/trust-center" className="hover:text-[var(--color-text)] transition-colors">Trust Center</Link></li>
             <li><Link to="/resources" className="hover:text-[var(--color-text)] transition-colors">{t("nav.resources")}</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--color-text)] transition-colors">{t("footer.contact")}</Link></li>
           </ul>
@@ -91,7 +92,10 @@ export default function Footer() {
       <div className="border-t border-[var(--color-border)]">
         <div className="container-page py-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-[var(--color-text-faint)]">
           <p>&copy; {new Date().getFullYear()} ComplAI, Inc. {t("footer.rights")}</p>
-          <p className="font-mono" dir="ltr">SOC 2 &middot; ISO 27001 &middot; HIPAA &middot; GDPR &middot; PCI DSS &middot; NIST CSF &middot; CMMC</p>
+          <div className="flex items-center gap-4">
+            <p className="font-mono" dir="ltr">SOC 2 &middot; ISO 27001 &middot; HIPAA &middot; GDPR &middot; PCI DSS &middot; NIST CSF &middot; CMMC</p>
+            <Link to="/admin/login" className="hover:text-[var(--color-text-muted)] transition-colors">Admin</Link>
+          </div>
         </div>
       </div>
     </footer>

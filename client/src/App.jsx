@@ -30,6 +30,10 @@ const Assistant = lazy(() => import("./pages/Assistant"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const TrustCenter = lazy(() => import("./pages/TrustCenter"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 
 /** Minimal, theme-aware placeholder shown while a lazy page chunk loads. */
 function RouteFallback() {
@@ -72,8 +76,12 @@ export default function App() {
                 <Route path="/assistant" element={<Assistant />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/checkout/:planId" element={<Checkout />} />
+                <Route path="/trust-center" element={<TrustCenter />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
