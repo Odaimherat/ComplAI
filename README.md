@@ -1,3 +1,4 @@
+<img width="41" height="40" alt="image" src="https://github.com/user-attachments/assets/a961b8e9-847d-472e-960c-613e48436f60" />
 # ComplAI
 
 Continuous compliance, powered by AI. A full marketing website for ComplAI,
