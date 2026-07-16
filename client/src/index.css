@@ -1,0 +1,150 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/*
+  Design tokens for ComplAI.
+  See /docs/design-and-research-report.md, section 4, for the full
+  rationale behind this palette and type system.
+*/
+@theme {
+  /* Surfaces (dark-mode-first) */
+  --color-bg: #0a0e13;
+  --color-bg-raised: #10151c;
+  --color-surface: #141a22;
+  --color-surface-2: #1b232d;
+  --color-border: #232c37;
+  --color-border-strong: #333f4d;
+
+  /* Text */
+  --color-text: #e9eef4;
+  --color-text-muted: #93a1b0;
+  --color-text-faint: #5c6b7a;
+
+  /* Brand accent: Signal Violet, used with restraint */
+  --color-accent: #7b5cfa;
+  --color-accent-strong: #9580ff;
+  --color-accent-soft: #7b5cfa1a;
+
+  /* Status palette - the literal vocabulary of a compliance dashboard */
+  --color-pass: #2ed3a3;
+  --color-pass-soft: #2ed3a31a;
+  --color-warn: #f5a623;
+  --color-warn-soft: #f5a6231a;
+  --color-fail: #f0546b;
+  --color-fail-soft: #f0546b1a;
+
+  /* Type */
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+.container-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--color-accent-strong), #4fd8c4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.7rem 1.3rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--color-accent-strong);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+.btn-secondary:hover {
+  border-color: var(--color-accent-strong);
+  color: var(--color-accent-strong);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-strong);
+}
