@@ -5,8 +5,38 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ComplAI: AI-driven continuous compliance, GRC automation, and AI-powered security for SOC 2, ISO 27001, HIPAA, GDPR, PCI DSS, and more." />
-    <meta name="theme-color" content="#0a0e13" />
+
+    <!--
+      theme-color is genuinely dynamic: browsers that support the
+      `media` attribute (Chrome, Safari on iOS/macOS) pick whichever
+      value matches the visitor's actual OS/browser color-scheme
+      preference and tint the address bar/UI chrome accordingly. This
+      is different from og:image below, which social crawlers fetch
+      once, server-side, with no notion of a "theme" at all - so a
+      single well-designed dark-themed card (matching the brand default)
+      is the right static asset, while theme-color is where "light/dark
+      aware" can actually mean something at the meta-tag level.
+    -->
+    <meta name="theme-color" content="#0a0e13" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)" />
+
     <title>ComplAI — Continuous Compliance, Powered by AI</title>
+
+    <!-- Open Graph / social link previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ComplAI" />
+    <meta property="og:title" content="ComplAI — Continuous Compliance, Powered by AI" />
+    <meta property="og:description" content="AI-driven GRC automation, AI-powered SOC, and defensive & offensive security for SOC 2, ISO 27001, HIPAA, GDPR, PCI DSS, NIST CSF, and CMMC." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ComplAI: Continuous compliance, powered by AI" />
+
+    <!-- Twitter/X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ComplAI — Continuous Compliance, Powered by AI" />
+    <meta name="twitter:description" content="AI-driven GRC automation, AI-powered SOC, and defensive & offensive security for SOC 2, ISO 27001, HIPAA, GDPR, PCI DSS, NIST CSF, and CMMC." />
+    <meta name="twitter:image" content="/og-image.png" />
   </head>
   <body>
     <div id="root"></div>
