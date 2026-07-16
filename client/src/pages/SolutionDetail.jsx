@@ -4,6 +4,7 @@ import { solutions, getSolutionById } from "../data/content";
 import { Section, SectionHeading } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import { useLanguage } from "../context/LanguageContext";
+import PlatformPreview from "../components/PlatformPreview";
 
 export default function SolutionDetail() {
   const { id } = useParams();
@@ -55,6 +56,13 @@ export default function SolutionDetail() {
           ))}
         </div>
       </Section>
+
+      {solution.flagship && (
+        <Section className="border-b border-[var(--color-border)]">
+          <SectionHeading eyebrow="See it in action" title="What the platform actually looks like" />
+          <PlatformPreview />
+        </Section>
+      )}
 
       <Section>
         <SectionHeading eyebrow={t("solutionDetail.capabilitiesEyebrow")} title={t("solutionDetail.capabilitiesTitle")} />

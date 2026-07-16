@@ -3,6 +3,7 @@ import { useLocation, Outlet } from "react-router-dom";
 import Nav from "./Nav";
 import Footer from "./Footer";
 import AssistantWidget from "./AssistantWidget";
+import GlobalSearch from "./GlobalSearch";
 
 /**
  * Shared page shell rendered around every route (see the single <Route
@@ -26,6 +27,7 @@ export default function Layout() {
       </main>
       <Footer />
       <AssistantWidget />
+      <GlobalSearch />
     </div>
   );
 }

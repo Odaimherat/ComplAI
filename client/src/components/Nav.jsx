@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, Menu, X, ShieldCheck, Sun, Moon, Languages } from "lucide-react";
+import { ChevronDown, Menu, X, ShieldCheck, Sun, Moon, Languages, Search } from "lucide-react";
 import { solutions } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { useTheme } from "../context/ThemeContext";
@@ -113,6 +113,13 @@ export default function Nav() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-2">
+          <button
+            onClick={() => window.dispatchEvent(new Event("complai:open-search"))}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-sm text-[var(--color-text-faint)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text-muted)] transition-colors"
+          >
+            <Search size={14} /> Search
+            <kbd className="text-[10px] font-mono border border-[var(--color-border-strong)] rounded px-1 py-0.5">⌘K</kbd>
+          </button>
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-2)] transition-colors"
