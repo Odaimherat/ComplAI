@@ -127,6 +127,32 @@ correctly, which the kernel reports as a bus error. Two fixes, pick one:
 Either way, once dependencies are installed from the environment you'll
 actually run the dev server from, this does not recur.
 
+## Additional features
+
+Beyond the marketing site itself, this build includes a few features
+that demonstrate full-stack, not just front-end, capability:
+
+- **Admin dashboard** (`/admin/login`, linked quietly from the footer):
+  password-protected internal tool showing lead/newsletter/subscription
+  data with real Mongo aggregation queries and dependency-free SVG
+  charts. Default password is `complai-admin` (set `ADMIN_PASSWORD` in
+  `server/.env` to change it). Session tokens are real signed JWTs.
+- **Mock self-serve checkout** (`/checkout/starter` from the Pricing
+  page): a full card-entry flow with real client- and server-side
+  validation (including a Luhn checksum), but no real payment processor
+  is ever contacted - see the doc comment in
+  `server/src/routes/billing.js` for exactly what a real Stripe
+  integration would replace. Try `4242 4242 4242 4242`, any future
+  expiry, any 3-digit CVC.
+- **Trust Center** (`/trust-center`): a public status/certifications/
+  sub-processors page, the same pattern real GRC vendors like Vanta and
+  Drata publish.
+- **Cmd+K / Ctrl+K global search**: client-side search across every
+  framework, solution, article, and page.
+- **Interactive platform preview**: a framed, tab-switching mockup of
+  what the actual product dashboard would look like, on the GRC
+  solution page.
+
 ## Frequently asked (about this build itself)
 
 **Does this need internet access to run?** No. After the one-time
