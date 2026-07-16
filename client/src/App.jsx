@@ -32,6 +32,8 @@ const Terms = lazy(() => import("./pages/Terms"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const TrustCenter = lazy(() => import("./pages/TrustCenter"));
+const FrameworkCompare = lazy(() => import("./pages/FrameworkCompare"));
+const NewsletterVerify = lazy(() => import("./pages/NewsletterVerify"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 
@@ -78,6 +80,8 @@ export default function App() {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/checkout/:planId" element={<Checkout />} />
                 <Route path="/trust-center" element={<TrustCenter />} />
+                <Route path="/frameworks/compare" element={<FrameworkCompare />} />
+                <Route path="/newsletter/verify/:token" element={<NewsletterVerify />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="/admin/login" element={<AdminLogin />} />

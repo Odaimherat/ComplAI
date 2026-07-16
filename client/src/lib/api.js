@@ -20,6 +20,10 @@ export function subscribeNewsletter(payload) {
   return request("/newsletter", { method: "POST", body: JSON.stringify(payload) });
 }
 
+export function verifyNewsletter(token) {
+  return request(`/newsletter/verify/${token}`);
+}
+
 export function sendAssistantMessage(message, sessionId) {
   return request("/assistant/chat", { method: "POST", body: JSON.stringify({ message, sessionId }) });
 }

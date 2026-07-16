@@ -18,6 +18,9 @@ export default function Frameworks() {
           {t("frameworks.title")}
         </h1>
         <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-2xl leading-relaxed">{t("frameworks.desc")}</p>
+        <Link to="/frameworks/compare" className="btn btn-secondary mt-6">
+          {t("frameworkCompare.eyebrow")}: {t("frameworkCompare.title")}
+        </Link>
       </Section>
 
       <Section className="pt-0">

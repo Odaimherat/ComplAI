@@ -1,25 +1,40 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Copy, Check } from "lucide-react";
 import { solutions } from "../data/content";
 import { subscribeNewsletter } from "../lib/api";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | done | error
+  const [status, setStatus] = useState("idle"); // idle | loading | pending | done | error
+  const [verifyUrl, setVerifyUrl] = useState(null);
+  const [copied, setCopied] = useState(false);
   const { language, t } = useLanguage();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setStatus("loading");
     try {
-      await subscribeNewsletter({ email, source: "footer" });
-      setStatus("done");
+      const res = await subscribeNewsletter({ email, source: "footer" });
+      if (res.verified) {
+        setStatus("done");
+      } else if (res.verifyUrl) {
+        setVerifyUrl(res.verifyUrl);
+        setStatus("pending");
+      } else {
+        setStatus("done");
+      }
       setEmail("");
     } catch {
       setStatus("error");
     }
+  }
+
+  function copyLink() {
+    navigator.clipboard?.writeText(`${window.location.origin}${verifyUrl}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   return (
@@ -51,8 +66,32 @@ export default function Footer() {
                 {status === "loading" ? "..." : t("common.subscribe")}
               </button>
             </div>
+
             {status === "done" && <p className="text-xs text-[var(--color-pass)] mt-2">{t("footer.subscribed")}</p>}
             {status === "error" && <p className="text-xs text-[var(--color-fail)] mt-2">{t("footer.subscribeError")}</p>}
+
+            {status === "pending" && verifyUrl && (
+              <div className="mt-3 p-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-2)]">
+                <p className="text-xs text-[var(--color-text-muted)] mb-2">{t("newsletter.checkInbox")}</p>
+                <p className="text-[11px] text-[var(--color-text-faint)] mb-2">{t("newsletter.demoModeLink")}</p>
+                <div className="flex gap-2">
+                  <Link
+                    to={verifyUrl}
+                    className="btn btn-primary flex-1 justify-center text-xs py-1.5"
+                  >
+                    {t("newsletter.confirmNow")}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={copyLink}
+                    className="btn btn-secondary text-xs py-1.5 px-2.5"
+                    aria-label="Copy verification link"
+                  >
+                    {copied ? <Check size={13} /> : <Copy size={13} />}
+                  </button>
+                </div>
+              </div>
+            )}
           </form>
         </div>
 
@@ -74,7 +113,8 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-[var(--color-text-muted)]">
             <li><Link to="/about" className="hover:text-[var(--color-text)] transition-colors">{t("nav.about")}</Link></li>
             <li><Link to="/case-studies" className="hover:text-[var(--color-text)] transition-colors">{t("footer.caseStudies")}</Link></li>
-            <li><Link to="/trust-center" className="hover:text-[var(--color-text)] transition-colors">Trust Center</Link></li>
+            <li><Link to="/trust-center" className="hover:text-[var(--color-text)] transition-colors">{t("footer.trustCenter")}</Link></li>
+            <li><Link to="/frameworks/compare" className="hover:text-[var(--color-text)] transition-colors">{t("frameworkCompare.eyebrow")}</Link></li>
             <li><Link to="/resources" className="hover:text-[var(--color-text)] transition-colors">{t("nav.resources")}</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--color-text)] transition-colors">{t("footer.contact")}</Link></li>
           </ul>
@@ -94,7 +134,7 @@ export default function Footer() {
           <p>&copy; {new Date().getFullYear()} ComplAI, Inc. {t("footer.rights")}</p>
           <div className="flex items-center gap-4">
             <p className="font-mono" dir="ltr">SOC 2 &middot; ISO 27001 &middot; HIPAA &middot; GDPR &middot; PCI DSS &middot; NIST CSF &middot; CMMC</p>
-            <Link to="/admin/login" className="hover:text-[var(--color-text-muted)] transition-colors">Admin</Link>
+            <Link to="/admin/login" className="hover:text-[var(--color-text-muted)] transition-colors">{t("footer.admin")}</Link>
           </div>
         </div>
       </div>
