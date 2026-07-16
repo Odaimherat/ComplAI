@@ -33,6 +33,7 @@ const STATUS_COLOR = {
 export default function ComplianceLiveDemo() {
   const { t } = useLanguage();
   const containerRef = useRef(null);
+  const keyCounter = useRef(0);
   const [started, setStarted] = useState(false);
   const [score, setScore] = useState(0);
   const [visibleLines, setVisibleLines] = useState([]);
@@ -63,8 +64,16 @@ export default function ComplianceLiveDemo() {
 
     let i = 0;
     const logTimer = setInterval(() => {
+      // `keyCounter` increments forever and is never reset, unlike the
+      // visible-lines array below (which is intentionally truncated to
+      // the last 6 entries via slice(-6)). Keying off the truncated
+      // array's length instead of this counter was the original bug:
+      // once the array filled up, its length stayed at 6 forever, so
+      // every new line reused the key `6` and React warned about
+      // duplicate keys on every tick.
+      keyCounter.current += 1;
       setVisibleLines((prev) => {
-        const next = [...prev, { ...LOG_LINES[i % LOG_LINES.length], key: prev.length }];
+        const next = [...prev, { ...LOG_LINES[i % LOG_LINES.length], key: keyCounter.current }];
         return next.slice(-6);
       });
       i += 1;

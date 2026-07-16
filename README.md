@@ -100,6 +100,33 @@ npm run build --prefix client   # outputs client/dist
 Serve `client/dist` with any static host, and run `node server/src/server.js`
 (with `MONGODB_URI` set) as the API behind it.
 
+## Troubleshooting
+
+**`vite` or `nodemon` says "not found" right after `npm install`.**
+Dependencies weren't installed in that specific folder yet. Run
+`npm run install:all` from the repo root (see Setup above) - it installs
+into `client/` and `server/` separately, since they're independent
+projects with their own `package.json`.
+
+**Running under WSL (Windows Subsystem for Linux) and `npm run dev`
+crashes with `Bus error` / exit code 135.** This is a known WSL2 issue,
+not a bug in this codebase: Vite's bundler ships a native binary
+(`@rolldown/...`), and native binaries loaded from a Windows drive mounted
+into WSL (a path under `/mnt/c/...`, using DrvFs) can fail to load
+correctly, which the kernel reports as a bus error. Two fixes, pick one:
+1. **Run from a native Windows shell instead** (PowerShell or Command
+   Prompt, not the WSL/Ubuntu terminal) if your project folder is already
+   on a Windows drive (e.g. `C:\Users\...`). Delete `node_modules` in the
+   root, `client/`, and `server/` folders, then re-run `npm install` and
+   `npm run install:all` **from that Windows shell** so it installs the
+   Windows-native binaries, then `npm run dev`.
+2. **Or move the project into WSL's own Linux filesystem** (e.g.
+   `~/projects/complai`, not anywhere under `/mnt/c/...`) and reinstall
+   there with a Linux shell. `ext4` doesn't have this DrvFs limitation.
+
+Either way, once dependencies are installed from the environment you'll
+actually run the dev server from, this does not recur.
+
 ## Frequently asked (about this build itself)
 
 **Does this need internet access to run?** No. After the one-time
