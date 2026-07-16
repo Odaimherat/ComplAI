@@ -127,7 +127,7 @@ export default function Checkout() {
           {error && <p className="text-sm text-[var(--color-fail)]">{error}</p>}
 
           <button type="submit" className="btn btn-primary w-full justify-center" disabled={status === "loading"}>
-            {status === "loading" ? "Processing..." : `Subscribe — ${plan.price}${plan.price !== "Custom" ? "" : ""}`}
+            {status === "loading" ? "Processing..." : `Subscribe — ${plan.price}${plan.period}`}
           </button>
 
           <p className="text-xs text-[var(--color-text-faint)] flex items-center gap-1.5 justify-center pt-1">

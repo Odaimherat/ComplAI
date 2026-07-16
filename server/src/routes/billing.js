@@ -61,6 +61,10 @@ function isValidExpiry(expiry) {
   return expiryDate >= new Date(now.getFullYear(), now.getMonth(), 1);
 }
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 router.post("/checkout", async (req, res) => {
   const { planId, name, email, cardNumber, expiry, cvc } = req.body || {};
 
@@ -73,6 +77,9 @@ router.post("/checkout", async (req, res) => {
   }
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required." });
+  }
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Please provide a valid email address." });
   }
   if (!cardNumber || !luhnCheck(cardNumber)) {
     return res.status(400).json({ error: "Card number looks invalid." });

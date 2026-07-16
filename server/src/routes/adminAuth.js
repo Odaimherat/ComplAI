@@ -1,5 +1,6 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
 
@@ -25,7 +26,20 @@ const JWT_SECRET = process.env.JWT_SECRET || "complai-dev-secret-change-me";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "complai-admin";
 const TOKEN_TTL = "12h";
 
-router.post("/login", (req, res) => {
+// The global API rate limiter (120 req/15min, see server.js) is generous
+// enough that it does not meaningfully protect a password-guessing
+// endpoint. This one is specific to /login: 10 attempts per 15 minutes
+// per IP, which is enough for a real user who mistypes a password a few
+// times but not enough to make brute-forcing a short password practical.
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many login attempts. Try again in a few minutes." },
+});
+
+router.post("/login", loginLimiter, (req, res) => {
   const { password } = req.body || {};
 
   if (typeof password !== "string" || password !== ADMIN_PASSWORD) {
