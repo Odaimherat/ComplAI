@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, CornerDownLeft } from "lucide-react";
 import { searchSite } from "../lib/searchIndex";
+import { useLanguage } from "../context/LanguageContext";
 
 /**
  * Cmd/Ctrl+K command palette. Mounted once in Layout.jsx so it is
@@ -9,6 +10,7 @@ import { searchSite } from "../lib/searchIndex";
  * lib/searchIndex.js - see that file for why this doesn't hit an API.
  */
 export default function GlobalSearch() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -81,7 +83,7 @@ export default function GlobalSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search frameworks, solutions, articles, pages..."
+            placeholder={t("search.placeholder")}
             className="flex-1 bg-transparent outline-none text-sm"
           />
           <button onClick={() => setOpen(false)} className="text-[var(--color-text-faint)]" aria-label="Close search">
@@ -91,7 +93,7 @@ export default function GlobalSearch() {
 
         <div className="max-h-80 overflow-y-auto">
           {query && results.length === 0 && (
-            <p className="text-sm text-[var(--color-text-faint)] px-4 py-6 text-center">No results for &ldquo;{query}&rdquo;.</p>
+            <p className="text-sm text-[var(--color-text-faint)] px-4 py-6 text-center">{t("search.noResults")} &ldquo;{query}&rdquo;.</p>
           )}
           {results.map((r, i) => (
             <button
@@ -107,16 +109,14 @@ export default function GlobalSearch() {
             </button>
           ))}
           {!query && (
-            <p className="text-xs text-[var(--color-text-faint)] px-4 py-4">
-              Try &ldquo;SOC 2&rdquo;, &ldquo;pricing&rdquo;, or &ldquo;offensive security&rdquo;.
-            </p>
+            <p className="text-xs text-[var(--color-text-faint)] px-4 py-4">{t("search.hint")}</p>
           )}
         </div>
 
         <div className="flex items-center gap-4 px-4 py-2.5 border-t border-[var(--color-border)] text-[10px] text-[var(--color-text-faint)] font-mono">
-          <span className="flex items-center gap-1"><CornerDownLeft size={11} /> to select</span>
-          <span>↑↓ to navigate</span>
-          <span>esc to close</span>
+          <span className="flex items-center gap-1"><CornerDownLeft size={11} /> {t("search.toSelect")}</span>
+          <span>↑↓ {t("search.toNavigate")}</span>
+          <span>esc {t("search.toClose")}</span>
         </div>
       </div>
     </div>

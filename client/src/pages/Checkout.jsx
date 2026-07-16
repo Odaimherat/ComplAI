@@ -4,6 +4,7 @@ import { CheckCircle2, ShieldCheck, ArrowLeft } from "lucide-react";
 import { pricingTiers } from "../data/content";
 import { checkout } from "../lib/api";
 import { Section } from "../components/ui/Section";
+import { useLanguage } from "../context/LanguageContext";
 
 function formatCardNumber(value) {
   return value
@@ -22,6 +23,8 @@ function formatExpiry(value) {
 export default function Checkout() {
   const { planId } = useParams();
   const plan = pricingTiers.find((t) => t.id === planId);
+  const { t, language } = useLanguage();
+  const isAr = language === "ar";
 
   const [form, setForm] = useState({ name: "", email: "", cardNumber: "", expiry: "", cvc: "" });
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
@@ -53,19 +56,17 @@ export default function Checkout() {
     return (
       <Section className="py-24 max-w-md mx-auto text-center">
         <CheckCircle2 size={44} className="text-[var(--color-pass)] mx-auto mb-5" />
-        <h1 className="font-display text-2xl font-semibold mb-2">You're subscribed</h1>
+        <h1 className="font-display text-2xl font-semibold mb-2">{t("checkout.successTitle")}</h1>
         <p className="text-[var(--color-text-muted)] mb-6">
-          {result.plan.name} — {result.plan.priceLabel}
+          {isAr ? result.plan.nameAr || result.plan.name : result.plan.name} — {result.plan.priceLabel}
         </p>
-        <div className="card p-5 text-start font-mono text-sm space-y-1.5 mb-8">
-          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">Invoice</span> {result.mockInvoiceId}</p>
-          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">Card</span> {result.cardBrand} •••• {result.cardLast4}</p>
-          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">Status</span> <span className="text-[var(--color-pass)]">active</span></p>
+        <div className="card p-5 text-start font-mono text-sm space-y-1.5 mb-8" dir="ltr">
+          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">{t("checkout.invoice")}</span> {result.mockInvoiceId}</p>
+          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">{t("checkout.card")}</span> {result.cardBrand} •••• {result.cardLast4}</p>
+          <p className="flex justify-between"><span className="text-[var(--color-text-faint)]">{t("checkout.status")}</span> <span className="text-[var(--color-pass)]">{t("checkout.active")}</span></p>
         </div>
-        <p className="text-xs text-[var(--color-text-faint)] mb-8">
-          This is a test-mode checkout for a portfolio project. No card was charged and no real payment processor was contacted.
-        </p>
-        <Link to="/" className="btn btn-primary">Back to home</Link>
+        <p className="text-xs text-[var(--color-text-faint)] mb-8">{t("checkout.testModeDisclaimer")}</p>
+        <Link to="/" className="btn btn-primary">{t("checkout.backHome")}</Link>
       </Section>
     );
   }
@@ -73,24 +74,26 @@ export default function Checkout() {
   return (
     <Section className="py-16 max-w-lg mx-auto">
       <Link to="/pricing" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] flex items-center gap-1.5 mb-8">
-        <ArrowLeft size={14} /> Back to pricing
+        <ArrowLeft size={14} className={isAr ? "rotate-180" : ""} /> {t("checkout.backToPricing")}
       </Link>
 
       <div className="card p-8">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-[10px] font-mono uppercase tracking-wide bg-[var(--color-warn-soft)] text-[var(--color-warn)] rounded px-2 py-0.5">
-            Test mode
+            {t("checkout.testMode")}
           </span>
         </div>
-        <h1 className="font-display text-2xl font-semibold mb-1">Subscribe to {plan.name}</h1>
+        <h1 className="font-display text-2xl font-semibold mb-1">
+          {t("checkout.subscribeTo")} {isAr ? plan.nameAr : plan.name}
+        </h1>
         <p className="text-[var(--color-text-muted)] mb-6">
-          {plan.price}{plan.period} — {plan.description}
+          {plan.price}{plan.period} — {isAr ? plan.descriptionAr : plan.description}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input required placeholder="Full name" value={form.name} onChange={(e) => update("name", e.target.value)} className="input" />
-            <input required type="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)} className="input" dir="ltr" />
+            <input required placeholder={t("checkout.fullName")} value={form.name} onChange={(e) => update("name", e.target.value)} className="input" />
+            <input required type="email" placeholder={t("checkout.email")} value={form.email} onChange={(e) => update("email", e.target.value)} className="input" dir="ltr" />
           </div>
 
           <input
@@ -115,7 +118,7 @@ export default function Checkout() {
             />
             <input
               required
-              placeholder="CVC"
+              placeholder={t("checkout.cvc")}
               value={form.cvc}
               onChange={(e) => update("cvc", e.target.value.replace(/\D/g, "").slice(0, 4))}
               className="input font-mono"
@@ -127,11 +130,11 @@ export default function Checkout() {
           {error && <p className="text-sm text-[var(--color-fail)]">{error}</p>}
 
           <button type="submit" className="btn btn-primary w-full justify-center" disabled={status === "loading"}>
-            {status === "loading" ? "Processing..." : `Subscribe — ${plan.price}${plan.period}`}
+            {status === "loading" ? t("checkout.processing") : `${t("checkout.subscribe")} — ${plan.price}${plan.period}`}
           </button>
 
           <p className="text-xs text-[var(--color-text-faint)] flex items-center gap-1.5 justify-center pt-1">
-            <ShieldCheck size={13} /> Test mode — try 4242 4242 4242 4242, any future expiry, any 3-digit CVC.
+            <ShieldCheck size={13} /> {t("checkout.testModeHint")}
           </p>
         </form>
       </div>

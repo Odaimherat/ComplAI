@@ -117,7 +117,7 @@ export default function Nav() {
             onClick={() => window.dispatchEvent(new Event("complai:open-search"))}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--color-border)] text-sm text-[var(--color-text-faint)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text-muted)] transition-colors"
           >
-            <Search size={14} /> Search
+            <Search size={14} /> {t("search.searchButton")}
             <kbd className="text-[10px] font-mono border border-[var(--color-border-strong)] rounded px-1 py-0.5">⌘K</kbd>
           </button>
           <button

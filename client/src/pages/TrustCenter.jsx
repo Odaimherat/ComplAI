@@ -3,6 +3,7 @@ import { Section, SectionHeading } from "../components/ui/Section";
 import StatusPill from "../components/ui/StatusPill";
 import Reveal from "../components/ui/Reveal";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 /**
  * A public Trust Center is a real, common pattern for compliance/security
@@ -41,25 +42,24 @@ const SYSTEMS = [
 ];
 
 export default function TrustCenter() {
+  const { t } = useLanguage();
+
   return (
     <div>
       <Section className="pb-10">
-        <p className="eyebrow mb-4">Trust Center</p>
+        <p className="eyebrow mb-4">{t("trustCenter.eyebrow")}</p>
         <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight max-w-2xl leading-tight">
-          The same transparency we ask our customers to give their auditors
+          {t("trustCenter.title")}
         </h1>
-        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-2xl leading-relaxed">
-          Everything a security reviewer typically asks for in a vendor questionnaire, published directly,
-          so you do not have to wait on an email thread to evaluate us.
-        </p>
+        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-2xl leading-relaxed">{t("trustCenter.desc")}</p>
       </Section>
 
       <Section className="pt-0 border-b border-[var(--color-border)]">
-        <SectionHeading eyebrow="Live status" title="System status" />
+        <SectionHeading eyebrow={t("trustCenter.liveStatus")} title={t("trustCenter.systemStatus")} />
         <div className="card p-6">
           <div className="flex items-center gap-2 mb-5">
             <ShieldCheck size={18} className="text-[var(--color-pass)]" />
-            <p className="font-display font-semibold">All systems operational</p>
+            <p className="font-display font-semibold">{t("trustCenter.allOperational")}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {SYSTEMS.map((s) => (
@@ -69,15 +69,12 @@ export default function TrustCenter() {
               </div>
             ))}
           </div>
-          <p className="text-xs text-[var(--color-text-faint)] mt-5">
-            Illustrative status for this portfolio build - a production Trust Center would pull this from a
-            real uptime monitor.
-          </p>
+          <p className="text-xs text-[var(--color-text-faint)] mt-5">{t("trustCenter.illustrativeNote")}</p>
         </div>
       </Section>
 
       <Section className="border-b border-[var(--color-border)]">
-        <SectionHeading eyebrow="Compliance" title="Certifications & frameworks" />
+        <SectionHeading eyebrow={t("trustCenter.compliance")} title={t("trustCenter.certifications")} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {CERTIFICATIONS.map((c, i) => (
             <Reveal key={c.name} delay={i * 50}>
@@ -92,12 +89,12 @@ export default function TrustCenter() {
           ))}
         </div>
         <p className="text-sm text-[var(--color-text-muted)] mt-6">
-          Need our full SOC 2 report or a signed DPA? <Link to="/contact" className="text-[var(--color-accent-strong)]">Request it here</Link>.
+          {t("trustCenter.requestReport")} <Link to="/contact" className="text-[var(--color-accent-strong)]">{t("trustCenter.requestReportLink")}</Link>.
         </p>
       </Section>
 
       <Section>
-        <SectionHeading eyebrow="Vendors" title="Sub-processors" description="Third parties that process customer data on our behalf." />
+        <SectionHeading eyebrow={t("trustCenter.vendors")} title={t("trustCenter.subProcessors")} description={t("trustCenter.subProcessorsDesc")} />
         <div className="card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
@@ -123,11 +120,11 @@ export default function TrustCenter() {
       <Section className="border-t border-[var(--color-border)]">
         <div className="card p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <h3 className="font-display font-semibold mb-1">Have a security questionnaire?</h3>
-            <p className="text-sm text-[var(--color-text-muted)]">We usually respond same-day with evidence links, not a PDF.</p>
+            <h3 className="font-display font-semibold mb-1">{t("trustCenter.haveQuestionnaire")}</h3>
+            <p className="text-sm text-[var(--color-text-muted)]">{t("trustCenter.haveQuestionnaireDesc")}</p>
           </div>
           <Link to="/contact" className="btn btn-primary shrink-0">
-            Contact security team <ExternalLink size={14} />
+            {t("trustCenter.contactSecurity")} <ExternalLink size={14} />
           </Link>
         </div>
       </Section>
