@@ -4,8 +4,9 @@ import { frameworks } from "../data/content";
 import { submitContact } from "../lib/api";
 import { Section } from "../components/ui/Section";
 import { useLanguage } from "../context/LanguageContext";
+import DemoSlotPicker from "../components/DemoSlotPicker";
 
-const EMPTY = { name: "", email: "", company: "", companySize: "", message: "", requestedDemo: false };
+const EMPTY = { name: "", email: "", company: "", companySize: "", message: "", requestedDemo: false, preferredSlot: "" };
 
 /** Small field wrapper so every form field gets a consistent label style. */
 function Field({ label, required, children }) {
@@ -37,6 +38,10 @@ export default function Contact() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (form.requestedDemo && !form.preferredSlot) {
+      setError(t("demo.noSlotSelected"));
+      return;
+    }
     setStatus("loading");
     setError("");
     try {
@@ -69,9 +74,9 @@ export default function Contact() {
                 <CheckCircle2 size={40} className="text-[var(--color-pass)] mx-auto mb-4" />
                 <h2 className="font-display text-2xl font-semibold mb-2">{t("contact.sent")}</h2>
                 <p className="text-[var(--color-text-muted)] mb-1">{t("contact.sentDesc")}</p>
-                {result.demoSlot && (
+                {result.preferredSlot && (
                   <p className="text-sm text-[var(--color-accent-strong)] mt-4 font-mono" dir="ltr">
-                    {t("contact.proposedSlot")} {result.demoSlot}
+                    {t("contact.proposedSlot")} {result.preferredSlot}
                   </p>
                 )}
                 <button onClick={() => setStatus("idle")} className="btn btn-secondary mt-6">
@@ -142,6 +147,10 @@ export default function Contact() {
                   />
                   {t("contact.demoCheckbox")}
                 </label>
+
+                {form.requestedDemo && (
+                  <DemoSlotPicker value={form.preferredSlot} onSelect={(slot) => update("preferredSlot", slot)} />
+                )}
 
                 {error && <p className="text-sm text-[var(--color-fail)]">{error}</p>}
 
