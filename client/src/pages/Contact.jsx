@@ -3,10 +3,24 @@ import { CheckCircle2, MapPin, Mail, Calendar } from "lucide-react";
 import { frameworks } from "../data/content";
 import { submitContact } from "../lib/api";
 import { Section } from "../components/ui/Section";
+import { useLanguage } from "../context/LanguageContext";
 
 const EMPTY = { name: "", email: "", company: "", companySize: "", message: "", requestedDemo: false };
 
+/** Small field wrapper so every form field gets a consistent label style. */
+function Field({ label, required, children }) {
+  return (
+    <label className="block">
+      <span className="text-xs font-mono uppercase tracking-wide text-[var(--color-text-muted)] mb-1.5 block">
+        {label} {required && <span className="text-[var(--color-accent-strong)]">*</span>}
+      </span>
+      {children}
+    </label>
+  );
+}
+
 export default function Contact() {
+  const { t } = useLanguage();
   const [form, setForm] = useState(EMPTY);
   const [selectedFrameworks, setSelectedFrameworks] = useState([]);
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
@@ -40,13 +54,11 @@ export default function Contact() {
   return (
     <div>
       <Section className="pb-10">
-        <p className="eyebrow mb-4">Contact</p>
+        <p className="eyebrow mb-4">{t("contact.eyebrow")}</p>
         <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight max-w-2xl leading-tight">
-          Tell us what you're trying to get compliant with
+          {t("contact.title")}
         </h1>
-        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-xl leading-relaxed">
-          Book a demo or send a message. We typically respond within one business day.
-        </p>
+        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-xl leading-relaxed">{t("contact.desc")}</p>
       </Section>
 
       <Section className="pt-0">
@@ -55,36 +67,34 @@ export default function Contact() {
             {status === "done" && result ? (
               <div className="text-center py-10">
                 <CheckCircle2 size={40} className="text-[var(--color-pass)] mx-auto mb-4" />
-                <h2 className="font-display text-2xl font-semibold mb-2">Message sent</h2>
-                <p className="text-[var(--color-text-muted)] mb-1">
-                  A confirmation has been sent to your inbox.
-                </p>
+                <h2 className="font-display text-2xl font-semibold mb-2">{t("contact.sent")}</h2>
+                <p className="text-[var(--color-text-muted)] mb-1">{t("contact.sentDesc")}</p>
                 {result.demoSlot && (
-                  <p className="text-sm text-[var(--color-accent-strong)] mt-4 font-mono">
-                    Proposed demo slot: {result.demoSlot}
+                  <p className="text-sm text-[var(--color-accent-strong)] mt-4 font-mono" dir="ltr">
+                    {t("contact.proposedSlot")} {result.demoSlot}
                   </p>
                 )}
                 <button onClick={() => setStatus("idle")} className="btn btn-secondary mt-6">
-                  Send another message
+                  {t("contact.sendAnother")}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <Field label="Full name" required>
+                  <Field label={t("contact.fullName")} required>
                     <input required value={form.name} onChange={(e) => update("name", e.target.value)} className="input" />
                   </Field>
-                  <Field label="Work email" required>
-                    <input required type="email" value={form.email} onChange={(e) => update("email", e.target.value)} className="input" />
+                  <Field label={t("contact.workEmail")} required>
+                    <input required type="email" dir="ltr" value={form.email} onChange={(e) => update("email", e.target.value)} className="input" />
                   </Field>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <Field label="Company">
+                  <Field label={t("contact.company")}>
                     <input value={form.company} onChange={(e) => update("company", e.target.value)} className="input" />
                   </Field>
-                  <Field label="Company size">
+                  <Field label={t("contact.companySize")}>
                     <select value={form.companySize} onChange={(e) => update("companySize", e.target.value)} className="input">
-                      <option value="">Select...</option>
+                      <option value="">{t("contact.selectPlaceholder")}</option>
                       <option>1-25</option>
                       <option>26-100</option>
                       <option>101-500</option>
@@ -93,8 +103,8 @@ export default function Contact() {
                   </Field>
                 </div>
 
-                <Field label="Frameworks you're interested in">
-                  <div className="flex flex-wrap gap-2">
+                <Field label={t("contact.frameworksInterest")}>
+                  <div className="flex flex-wrap gap-2" dir="ltr">
                     {frameworks.map((f) => (
                       <button
                         type="button"
@@ -112,14 +122,14 @@ export default function Contact() {
                   </div>
                 </Field>
 
-                <Field label="Message" required>
+                <Field label={t("contact.message")} required>
                   <textarea
                     required
                     rows={4}
                     value={form.message}
                     onChange={(e) => update("message", e.target.value)}
                     className="input resize-none"
-                    placeholder="What are you trying to get done?"
+                    placeholder={t("contact.messagePlaceholder")}
                   />
                 </Field>
 
@@ -130,13 +140,13 @@ export default function Contact() {
                     onChange={(e) => update("requestedDemo", e.target.checked)}
                     className="accent-[var(--color-accent)]"
                   />
-                  I'd like to book a live demo
+                  {t("contact.demoCheckbox")}
                 </label>
 
                 {error && <p className="text-sm text-[var(--color-fail)]">{error}</p>}
 
                 <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={status === "loading"}>
-                  {status === "loading" ? "Sending..." : "Send message"}
+                  {status === "loading" ? t("common.sending") : t("common.send")}
                 </button>
               </form>
             )}
@@ -145,49 +155,22 @@ export default function Contact() {
           <div className="space-y-6">
             <div className="card p-6">
               <MapPin size={18} className="text-[var(--color-accent-strong)] mb-3" />
-              <p className="font-display font-semibold mb-1">Office</p>
+              <p className="font-display font-semibold mb-1">{t("contact.office")}</p>
               <p className="text-sm text-[var(--color-text-muted)]">548 Market Street, Suite 88000<br />San Francisco, CA 94104</p>
             </div>
             <div className="card p-6">
               <Mail size={18} className="text-[var(--color-accent-strong)] mb-3" />
-              <p className="font-display font-semibold mb-1">Email</p>
-              <p className="text-sm text-[var(--color-text-muted)]">hello@complai.example</p>
+              <p className="font-display font-semibold mb-1">{t("contact.email")}</p>
+              <p className="text-sm text-[var(--color-text-muted)]" dir="ltr">hello@complai.example</p>
             </div>
             <div className="card p-6">
               <Calendar size={18} className="text-[var(--color-accent-strong)] mb-3" />
-              <p className="font-display font-semibold mb-1">Prefer to schedule directly?</p>
-              <p className="text-sm text-[var(--color-text-muted)]">
-                Check "I'd like to book a live demo" in the form and we'll propose a time slot instantly.
-              </p>
+              <p className="font-display font-semibold mb-1">{t("contact.preferSchedule")}</p>
+              <p className="text-sm text-[var(--color-text-muted)]">{t("contact.preferScheduleDesc")}</p>
             </div>
           </div>
         </div>
       </Section>
-
-      <style>{`
-        .input {
-          width: 100%;
-          background: var(--color-surface);
-          border: 1px solid var(--color-border);
-          border-radius: 8px;
-          padding: 0.6rem 0.8rem;
-          font-size: 0.9rem;
-          color: var(--color-text);
-          outline: none;
-        }
-        .input:focus { border-color: var(--color-accent-strong); }
-      `}</style>
     </div>
-  );
-}
-
-function Field({ label, required, children }) {
-  return (
-    <label className="block">
-      <span className="text-xs font-mono uppercase tracking-wide text-[var(--color-text-muted)] mb-1.5 block">
-        {label} {required && <span className="text-[var(--color-accent-strong)]">*</span>}
-      </span>
-      {children}
-    </label>
   );
 }

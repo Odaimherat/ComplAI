@@ -2,11 +2,15 @@ export const pricingTiers = [
   {
     id: "starter",
     name: "Starter",
+    nameAr: "الأساسية",
     audience: "Early-stage teams pursuing their first framework",
+    audienceAr: "فرق ناشئة تسعى لأول إطار امتثال",
     price: "$799",
     period: "/month, billed annually",
     description:
       "Everything a team needs to get to SOC 2 Type I or a first framework without hiring a compliance function.",
+    descriptionAr:
+      "كل ما يحتاجه فريق للوصول إلى SOC 2 النوع الأول أو أي إطار أول دون توظيف وظيفة امتثال مستقلة.",
     features: [
       "1 framework included (add more anytime)",
       "Continuous control monitoring, up to 150 controls",
@@ -20,11 +24,15 @@ export const pricingTiers = [
   {
     id: "business",
     name: "Business",
+    nameAr: "الأعمال",
     audience: "Growing companies managing multiple frameworks and buyers",
+    audienceAr: "شركات نامية تدير عدة أطر وعملاء مؤسسيين",
     price: "$2,400",
     period: "/month, billed annually",
     description:
       "For teams juggling overlapping frameworks and an active security-questionnaire pipeline from enterprise customers.",
+    descriptionAr:
+      "لفرق تدير أطراً متداخلة وتتلقى باستمرار استبيانات أمنية من عملاء مؤسسيين.",
     features: [
       "Up to 4 frameworks included",
       "Continuous control monitoring, unlimited controls",
@@ -40,11 +48,15 @@ export const pricingTiers = [
   {
     id: "enterprise",
     name: "Enterprise",
+    nameAr: "المؤسسات",
     audience: "Regulated or multi-entity organizations at scale",
+    audienceAr: "مؤسسات خاضعة للتنظيم أو متعددة الكيانات على نطاق واسع",
     price: "Custom",
     period: "annual contract",
     description:
       "For regulated industries, multiple business units, or organizations that need dedicated security engineering support alongside compliance automation.",
+    descriptionAr:
+      "لقطاعات خاضعة للتنظيم أو وحدات أعمال متعددة أو مؤسسات تحتاج دعم هندسة أمنية مخصص إلى جانب أتمتة الامتثال.",
     features: [
       "Unlimited frameworks",
       "Custom framework mapping (internal control library, customer-specific requirements)",

@@ -1,4 +1,5 @@
 import { Section } from "../components/ui/Section";
+import { useLanguage } from "../context/LanguageContext";
 
 const SECTIONS = [
   {
@@ -56,14 +57,20 @@ const SECTIONS = [
 ];
 
 export default function Terms() {
+  const { t, language } = useLanguage();
   return (
     <div>
       <Section className="pb-8 max-w-3xl mx-auto">
-        <p className="eyebrow mb-4">Legal</p>
+        <p className="eyebrow mb-4">{t("footer.legal")}</p>
         <h1 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">Terms of Service</h1>
-        <p className="text-sm text-[var(--color-text-muted)] mt-3">Effective date: January 1, 2026</p>
+        <p className="text-sm text-[var(--color-text-muted)] mt-3">{t("legal.effective")}</p>
+        {language === "ar" && (
+          <p className="text-xs text-[var(--color-text-faint)] mt-4 italic">
+            نص الشروط القانونية الكامل أدناه معروض بالإنجليزية حالياً، تجنباً لمخاطر الترجمة الآلية للنصوص القانونية.
+          </p>
+        )}
       </Section>
-      <Section className="pt-0 max-w-3xl mx-auto space-y-8">
+      <Section className="pt-0 max-w-3xl mx-auto space-y-8" dir="ltr">
         {SECTIONS.map((s) => (
           <div key={s.title}>
             <h2 className="font-display font-semibold mb-2">{s.title}</h2>

@@ -3,15 +3,24 @@ import { ArrowRight } from "lucide-react";
 import { articles } from "../data/content";
 import { Section } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Resources() {
+  const { t, language } = useLanguage();
+  const isAr = language === "ar";
+
   return (
     <div>
       <Section className="pb-10">
-        <p className="eyebrow mb-4">Resources</p>
+        <p className="eyebrow mb-4">{t("resources.eyebrow")}</p>
         <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight max-w-2xl leading-tight">
-          Writing on compliance, AI, and security, from people who do the work
+          {t("resources.title")}
         </h1>
+        {isAr && (
+          <p className="text-xs text-[var(--color-text-faint)] mt-4 italic">
+            المقالات أدناه معروضة بالإنجليزية حالياً.
+          </p>
+        )}
       </Section>
 
       <Section className="pt-0">
@@ -19,7 +28,7 @@ export default function Resources() {
           {articles.map((a, i) => (
             <Reveal key={a.slug} delay={i * 50}>
               <Link to={`/resources/${a.slug}`} className="card p-7 h-full flex flex-col hover:border-[var(--color-accent-strong)] transition-colors">
-                <div className="flex items-center gap-3 mb-3 text-xs font-mono text-[var(--color-text-faint)]">
+                <div className="flex items-center gap-3 mb-3 text-xs font-mono text-[var(--color-text-faint)]" dir="ltr">
                   <span>{a.category}</span>
                   <span>&middot;</span>
                   <span>{a.readTime}</span>
@@ -27,7 +36,7 @@ export default function Resources() {
                 <h2 className="font-display text-xl font-semibold mb-3">{a.title}</h2>
                 <p className="text-sm text-[var(--color-text-muted)] leading-relaxed flex-1">{a.excerpt}</p>
                 <span className="mt-4 text-sm font-medium text-[var(--color-accent-strong)] flex items-center gap-1">
-                  Read article <ArrowRight size={14} />
+                  {t("common.readMore")} <ArrowRight size={14} className={isAr ? "rotate-180" : ""} />
                 </span>
               </Link>
             </Reveal>

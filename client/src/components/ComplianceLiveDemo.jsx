@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 /**
  * The homepage's signature element (see design-and-research-report.md,
@@ -30,6 +31,7 @@ const STATUS_COLOR = {
 };
 
 export default function ComplianceLiveDemo() {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const [started, setStarted] = useState(false);
   const [score, setScore] = useState(0);
@@ -100,17 +102,15 @@ export default function ComplianceLiveDemo() {
             {score}%
           </text>
           <text x="100" y="118" textAnchor="middle" fontSize="11" fontFamily="var(--font-mono)" fill="var(--color-text-muted)">
-            AUDIT READY
+            {t("home.auditReady")}
           </text>
         </svg>
-        <p className="mt-4 text-sm text-[var(--color-text-muted)] text-center max-w-[220px]">
-          Live readiness score across SOC 2, ISO 27001, and HIPAA for a representative ComplAI customer.
-        </p>
+        <p className="mt-4 text-sm text-[var(--color-text-muted)] text-center max-w-[220px]">{t("home.liveScoreCaption")}</p>
       </div>
 
-      <div className="font-mono text-sm bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4 h-[220px] overflow-hidden flex flex-col justify-end">
+      <div className="font-mono text-sm bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4 h-[220px] overflow-hidden flex flex-col justify-end" dir="ltr">
         {visibleLines.length === 0 && (
-          <p className="text-[var(--color-text-faint)]">Waiting for control checks...</p>
+          <p className="text-[var(--color-text-faint)]">{t("home.waitingForChecks")}</p>
         )}
         {visibleLines.map((line) => (
           <div key={line.key} className="flex items-baseline gap-2 py-0.5 opacity-0 animate-[fadeIn_0.4s_ease_forwards]">

@@ -4,6 +4,13 @@ import Nav from "./Nav";
 import Footer from "./Footer";
 import AssistantWidget from "./AssistantWidget";
 
+/**
+ * Shared page shell rendered around every route (see the single <Route
+ * element={<Layout />}> wrapper in App.jsx). Renders the nav, the routed
+ * page content via <Outlet />, the footer, and the floating assistant
+ * widget, and resets scroll position on every route change so navigating
+ * to a new page doesn't preserve the previous page's scroll offset.
+ */
 export default function Layout() {
   const location = useLocation();
 

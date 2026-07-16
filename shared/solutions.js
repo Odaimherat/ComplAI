@@ -11,6 +11,11 @@ export const solutions = [
     name: "GRC & Compliance Automation",
     shortName: "GRC",
     tagline: "Continuous compliance, not once-a-year fire drills",
+    nameAr: "الحوكمة والمخاطر والامتثال",
+    shortNameAr: "الحوكمة والامتثال",
+    taglineAr: "امتثال مستمر، لا عمليات إطفاء حرائق سنوية",
+    summaryAr:
+      "تحوّل ComplAI الاستعداد للتدقيق من هرولة ربع سنوية إلى عملية تعمل في الخلفية. تتصل المنصة بمنظومتك التقنية، وتربط الأدلة الحية بالضوابط عبر كل إطار تدعمه، وتقيّم جاهزيتك للتدقيق لحظياً، وتحافظ على سجل مخاطر قائم ومُعدّ بالذكاء الاصطناعي بحيث لا يكتشف المدقق أي شيء لأول مرة.",
     summary:
       "ComplAI turns audit prep from a quarterly scramble into a background process. The platform connects to your stack, maps live evidence to controls across every framework you support, scores your audit readiness in real time, and keeps a standing AI-drafted risk register so nothing is discovered for the first time by an auditor.",
     capabilities: [
@@ -53,6 +58,11 @@ export const solutions = [
     name: "AI-Powered SOC / MDR",
     shortName: "SOC / MDR",
     tagline: "Detection and response that keeps your controls honest",
+    nameAr: "مركز عمليات أمنية مدعوم بالذكاء الاصطناعي",
+    shortNameAr: "المراقبة والاستجابة",
+    taglineAr: "كشف واستجابة يبقيان ضوابطك صادقة",
+    summaryAr:
+      "خدمة كشف واستجابة مُدارة يقوم فيها الذكاء الاصطناعي بفرز الضجيج بحيث يقضي فريقك، وفريقنا، الوقت على الإشارات الحقيقية فقط. كل حادثة يتعامل معها المركز تتحول أيضاً إلى دليل موثّق للكشف والاستجابة والإغلاق، يغذي وضع الامتثال لديك مباشرة بدلاً من أن يبقى في أداة منفصلة.",
     summary:
       "A managed detection and response service where AI triages the noise so your team, and ours, only spend time on signal. Every incident the SOC handles also becomes evidence: a documented detection, response, and closure, feeding directly back into your compliance posture instead of living in a separate tool.",
     capabilities: [
@@ -90,6 +100,11 @@ export const solutions = [
     name: "Defensive Security",
     shortName: "Defensive Security",
     tagline: "Hardening that matches what your compliance program claims",
+    nameAr: "الأمن الدفاعي",
+    shortNameAr: "الأمن الدفاعي",
+    taglineAr: "تحصين يطابق فعلياً ما يدّعيه برنامج الامتثال لديك",
+    summaryAr:
+      "إدارة وضع الأمان لنقاط النهاية والشبكة والسحابة مع معالجة تُرتَّب أولوياتها بالذكاء الاصطناعي، بحيث يتطابق التحصين الذي تنفذه فعلياً مع الضوابط التي يدّعي برنامج الامتثال لديك أنها قائمة.",
     summary:
       "Endpoint, network, and cloud security posture management with AI-prioritized remediation, so the hardening work you actually do lines up with the controls your compliance program is claiming are in place.",
     capabilities: [
@@ -127,6 +142,11 @@ export const solutions = [
     name: "Offensive Security",
     shortName: "Offensive Security",
     tagline: "Proof, not paperwork, that your controls hold under pressure",
+    nameAr: "الأمن الهجومي",
+    shortNameAr: "الأمن الهجومي",
+    taglineAr: "إثبات، لا أوراق، بأن ضوابطك تصمد تحت الضغط",
+    summaryAr:
+      "اختبار اختراق مدعوم بالذكاء الاصطناعي، وفرق حمراء، وإدارة سطح الهجوم، تنتج نوع الأدلة التي يريدها فعلياً المدققون والعملاء المهتمون بالأمن: إثبات أن ضوابطك اختُبرت أمام سلوك خصم حقيقي، لا أنها موثقة فقط.",
     summary:
       "AI-assisted penetration testing, red teaming, and attack surface management that produces the kind of evidence auditors and security-conscious customers actually want: proof your controls were tested against real adversary behavior, not just documented.",
     capabilities: [

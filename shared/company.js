@@ -1,6 +1,15 @@
 export const mission =
   "Compliance work should prove that your security is real, not distract you from making it real. ComplAI exists to make continuous, evidence-backed compliance the default, so audits become a formality instead of an emergency.";
 
+export const missionAr =
+  "يجب أن يُثبت عمل الامتثال أن أمانك حقيقي، لا أن يشتتك عن جعله حقيقياً. توجد ComplAI لجعل الامتثال المستمر والمدعوم بالأدلة هو الافتراضي، بحيث يصبح التدقيق إجراءً روتينياً لا حالة طوارئ.";
+
+export const storyAr = [
+  "تأسست ComplAI عام 2022 على يد مدقق سابق في إحدى شركات المحاسبة الكبرى الأربع ومهندس أمني، وصل كل منهما بشكل مستقل إلى الاستنتاج نفسه من طرفي الطاولة: صناعة الامتثال كانت مُحسَّنة لإنتاج الأوراق، لا لإنتاج الأمان.",
+  "شاهد الفريق المؤسس النمط نفسه يتكرر شركة تلو أخرى: هرولة في الأسابيع التي تسبق التدقيق، وسجل مخاطر لم يفتحه أحد منذ آخر تدقيق، ووضع أمني كان، عملياً، مهما قال الجدول في اليوم الوحيد الذي تحقق منه أحد. في الوقت نفسه، كان العمل الأمني الفعلي، الكشف، والتحصين، والاختبار، يعيش في أدوات منفصلة تماماً لا تتواصل أبداً مع برنامج الامتثال.",
+  "بُنيت ComplAI لسد هذه الفجوة: منصة واحدة تغذي فيها المراقبة المستمرة، وجمع الأدلة بالذكاء الاصطناعي، وأعمال المراقبة والأمن الدفاعي والهجومي التي تُبقي الضوابط صادقة، الصورة الامتثالية نفسها لحظياً، بدلاً من أربعة مشاريع سنوية منفصلة.",
+];
+
 export const story = [
   "ComplAI was founded in 2022 by a former Big Four IT auditor and a security engineer who had each independently reached the same conclusion from opposite sides of the table: the compliance industry was optimized for producing paperwork, not for producing security.",
   "The founding team had watched the same pattern play out at company after company: a scramble in the weeks before an audit, a risk register nobody had opened since the last one, and a security posture that was, in practice, whatever the spreadsheet said it was on the one day someone checked. Meanwhile the actual security work, detection, hardening, testing, lived in entirely separate tools that never talked to the compliance program at all.",
@@ -23,6 +32,25 @@ export const values = [
   {
     title: "Security and compliance are one job",
     detail: "A compliance program that does not reflect real security work is paperwork. A security program with no compliance evidence is unprovable. We do not treat them as separate products.",
+  },
+];
+
+export const valuesAr = [
+  {
+    title: "الدليل قبل التصريح",
+    detail: "لا يُعتبر الضابط \"قائماً\" لأن مستند سياسة يقول ذلك. بل لأننا نستطيع إثباته الآن.",
+  },
+  {
+    title: "ممل عن قصد",
+    detail: "يجب أن يبدو برنامج الامتثال الجيد بلا مفاجآت. المفاجآت مكانها الكشف عن التهديدات، لا معرفة ما إذا كانت مراجعة صلاحيات الربع الماضي قد تمت.",
+  },
+  {
+    title: "المدقق شريك، لا عائق",
+    detail: "نبني المنصة لتخدم عملية مراجعة المدقق الفعلية، لا للالتفاف حولها. كل تقرير ننتجه مصمم ليُسلَّم مباشرة لمدقق.",
+  },
+  {
+    title: "الأمان والامتثال عمل واحد",
+    detail: "برنامج امتثال لا يعكس عملاً أمنياً حقيقياً هو أوراق فقط. وبرنامج أمني بلا أدلة امتثال غير قابل للإثبات. لا نتعامل معهما كمنتجين منفصلين.",
   },
 ];
 

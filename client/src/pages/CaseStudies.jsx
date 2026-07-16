@@ -1,15 +1,24 @@
 import { caseStudies } from "../data/content";
 import { Section } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function CaseStudies() {
+  const { t, language } = useLanguage();
+  const isAr = language === "ar";
+
   return (
     <div>
       <Section className="pb-10">
-        <p className="eyebrow mb-4">Case Studies</p>
+        <p className="eyebrow mb-4">{t("caseStudies.eyebrow")}</p>
         <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight max-w-3xl leading-tight">
-          Real outcomes, with the numbers attached
+          {t("caseStudies.title")}
         </h1>
+        {isAr && (
+          <p className="text-xs text-[var(--color-text-faint)] mt-4 italic">
+            نصوص دراسات الحالة أدناه معروضة بالإنجليزية حالياً.
+          </p>
+        )}
       </Section>
 
       <Section className="pt-0 space-y-10">
@@ -25,9 +34,9 @@ export default function CaseStudies() {
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                 {[
-                  ["Challenge", c.challenge],
-                  ["Approach", c.approach],
-                  ["Result", c.result],
+                  [t("caseStudies.challenge"), c.challenge],
+                  [t("caseStudies.approach"), c.approach],
+                  [t("caseStudies.result"), c.result],
                 ].map(([label, text]) => (
                   <div key={label}>
                     <p className="eyebrow mb-2">{label}</p>
@@ -39,13 +48,13 @@ export default function CaseStudies() {
               <div className="grid grid-cols-3 gap-4 border-t border-[var(--color-border)] pt-6 mb-6">
                 {c.metrics.map((m) => (
                   <div key={m.label}>
-                    <p className="font-display text-xl md:text-2xl font-semibold">{m.value}</p>
+                    <p className="font-display text-xl md:text-2xl font-semibold" dir="ltr">{m.value}</p>
                     <p className="text-xs text-[var(--color-text-muted)] mt-1">{m.label}</p>
                   </div>
                 ))}
               </div>
 
-              <blockquote className="border-l-2 border-[var(--color-accent-strong)] pl-4 text-[var(--color-text)] italic">
+              <blockquote className="border-s-2 border-[var(--color-accent-strong)] ps-4 text-[var(--color-text)] italic">
                 &ldquo;{c.quote}&rdquo;
                 <footer className="text-sm text-[var(--color-text-muted)] not-italic mt-2">{c.quoteAttribution}</footer>
               </blockquote>

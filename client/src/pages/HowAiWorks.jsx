@@ -1,6 +1,7 @@
 import { Section, SectionHeading } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import StatusPill from "../components/ui/StatusPill";
+import { useLanguage } from "../context/LanguageContext";
 
 const LAYERS = [
   {
@@ -36,17 +37,22 @@ const LAYERS = [
 ];
 
 export default function HowAiWorks() {
+  const { t, language } = useLanguage();
+  const isAr = language === "ar";
+
   return (
     <div>
       <Section className="pb-10">
-        <p className="eyebrow mb-4">How Our AI Works</p>
+        <p className="eyebrow mb-4">{t("howAiWorks.eyebrow")}</p>
         <h1 className="font-display text-4xl md:text-5xl font-semibold tracking-tight max-w-3xl leading-tight">
-          Every automated decision is reviewable. None of them are a black box.
+          {t("howAiWorks.title")}
         </h1>
-        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-2xl leading-relaxed">
-          ComplAI's AI layer does five distinct jobs across the platform. Here is exactly what each one does,
-          what it does not do, and where a human stays in the loop.
-        </p>
+        <p className="mt-5 text-lg text-[var(--color-text-muted)] max-w-2xl leading-relaxed">{t("howAiWorks.desc")}</p>
+        {isAr && (
+          <p className="text-xs text-[var(--color-text-faint)] mt-4 italic">
+            الشرح التقني التفصيلي أدناه معروض بالإنجليزية حالياً.
+          </p>
+        )}
       </Section>
 
       <Section className="pt-0 space-y-6">
@@ -58,7 +64,7 @@ export default function HowAiWorks() {
                 <h2 className="font-display text-xl font-semibold mt-1 mb-3">{l.title}</h2>
                 <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">{l.detail}</p>
               </div>
-              <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4 font-mono text-xs text-[var(--color-text-muted)] flex items-center">
+              <div className="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-4 font-mono text-xs text-[var(--color-text-muted)] flex items-center" dir="ltr">
                 {l.example}
               </div>
             </div>
@@ -67,10 +73,10 @@ export default function HowAiWorks() {
       </Section>
 
       <Section className="border-t border-[var(--color-border)] bg-[var(--color-bg-raised)]">
-        <SectionHeading eyebrow="Human in the loop" title="What always stays a human decision" />
+        <SectionHeading eyebrow={t("howAiWorks.humanEyebrow")} title={t("howAiWorks.humanTitle")} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="card p-6">
-            <StatusPill status="pass" label="Automated" />
+            <StatusPill status="pass" label={t("howAiWorks.automated")} />
             <ul className="mt-4 space-y-2 text-sm text-[var(--color-text-muted)]">
               <li>Evidence collection from connected systems</li>
               <li>First-pass control mapping and confidence scoring</li>
@@ -79,7 +85,7 @@ export default function HowAiWorks() {
             </ul>
           </div>
           <div className="card p-6">
-            <StatusPill status="warn" label="Always human-reviewed" />
+            <StatusPill status="warn" label={t("howAiWorks.alwaysReviewed")} />
             <ul className="mt-4 space-y-2 text-sm text-[var(--color-text-muted)]">
               <li>Low-confidence evidence classifications</li>
               <li>Control design decisions (what your process should be)</li>
