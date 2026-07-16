@@ -166,6 +166,25 @@ that demonstrate full-stack, not just front-end, capability:
 - **Interactive platform preview**: a framed, tab-switching mockup of
   what the actual product dashboard would look like, on the GRC
   solution page.
+- **Framework comparison tool** (`/frameworks/compare`): pick up to 3
+  frameworks and compare controls, timelines, and AI-mapping side by side.
+- **Calendar-style demo scheduling**: the contact form's "book a demo"
+  flow now shows an actual weekday/time picker instead of the server
+  assigning a random slot.
+- **Newsletter double opt-in**: subscribing returns a verification link
+  (`/newsletter/verify/:token`) rather than subscribing instantly - since
+  no real email provider is connected, the link is shown directly in the
+  footer form instead of pretending it was emailed somewhere invisible.
+- **Admin audit log**: every login attempt and every lead status change
+  is recorded and viewable in a dedicated dashboard tab.
+- **Arabic translation extended** to checkout, Trust Center, and global
+  search - the newest features above are now bilingual too, not just the
+  original page set.
+- **Open Graph / social card**: a custom-designed 1200x630 preview image
+  and full `og:`/`twitter:` meta tags, plus OS-theme-aware `theme-color`
+  (this one *is* genuinely dynamic - see the comment in `index.html` for
+  why the social image itself can't be, since crawlers don't have a
+  "theme").
 
 ## Frequently asked (about this build itself)
 
