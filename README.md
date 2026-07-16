@@ -1,3 +1,4 @@
+<img width="41" height="40" alt="image" src="https://github.com/user-attachments/assets/a961b8e9-847d-472e-960c-613e48436f60" />
 # ComplAI
 
 Continuous compliance, powered by AI. A full marketing website for ComplAI,
@@ -8,6 +9,19 @@ Offensive Security.
 This is a portfolio build: a complete MERN application (MongoDB, Express,
 React, Node) with a working backend, a rule-based AI assistant, and no paid
 APIs or services anywhere in the stack.
+
+
+## Images
+
+<img width="1902" height="910" alt="image" src="https://github.com/user-attachments/assets/6a24629c-7154-40b3-b780-1bdc69a3d339" />
+
+<img width="1911" height="897" alt="image" src="https://github.com/user-attachments/assets/bfc82d64-8824-4b25-98ef-4713234f9476" />
+
+<img width="1877" height="895" alt="image" src="https://github.com/user-attachments/assets/582abe16-6440-4580-ba9d-146f5081d009" />
+
+<img width="1507" height="841" alt="image" src="https://github.com/user-attachments/assets/f472a7bb-a417-4edd-9360-b7a40a2fd987" />
+
+
 
 ## Stack
 
