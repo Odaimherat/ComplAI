@@ -23,3 +23,7 @@ export function subscribeNewsletter(payload) {
 export function sendAssistantMessage(message, sessionId) {
   return request("/assistant/chat", { method: "POST", body: JSON.stringify({ message, sessionId }) });
 }
+
+export function checkout(payload) {
+  return request("/billing/checkout", { method: "POST", body: JSON.stringify(payload) });
+}

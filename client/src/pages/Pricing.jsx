@@ -51,7 +51,10 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/contact" className={`btn ${tier.highlighted ? "btn-primary" : "btn-secondary"} w-full justify-center`}>
+              <Link
+                to={tier.price === "Custom" || tier.highlighted ? "/contact" : `/checkout/${tier.id}`}
+                className={`btn ${tier.highlighted ? "btn-primary" : "btn-secondary"} w-full justify-center`}
+              >
                 {tier.cta === "Talk to sales" ? t("common.talkToSales") : tier.cta === "Contact sales" ? t("common.contactSales") : t("common.startTrial")}
               </Link>
             </div>
