@@ -13,6 +13,19 @@ APIs or services anywhere in the stack.
 
 - **Client**: React 19 + Vite, React Router, Tailwind CSS v4, lucide-react icons.
 - **Server**: Express + Mongoose (MongoDB), zero paid dependencies.
+- **Fonts**: self-hosted via `@fontsource` (Space Grotesk, IBM Plex Sans,
+  IBM Plex Mono, Cairo, Tajawal). No Google Fonts CDN request at runtime -
+  the site works with the network fully disconnected once `npm install`
+  has run once.
+- **Theming**: light and dark mode, toggleable from the nav, persisted
+  locally and defaulting to the visitor's OS preference. See
+  `client/src/context/ThemeContext.jsx`.
+- **Language**: English and Arabic, with right-to-left layout, toggleable
+  from the nav. See `client/src/context/LanguageContext.jsx` and
+  `client/src/i18n/translations.js`. Scope is documented honestly in
+  `docs/design-and-research-report.md` section 10 - all navigation, forms,
+  and marketing copy is translated; long-form content (full blog articles,
+  full legal text, detailed case studies) stays English in this build.
 - **Shared content**: `/shared` holds the site's real content (frameworks,
   solutions, pricing, case studies, blog, company info) as plain JS modules,
   imported by both the client (for pages) and the server (for the AI
@@ -86,6 +99,26 @@ npm run build --prefix client   # outputs client/dist
 
 Serve `client/dist` with any static host, and run `node server/src/server.js`
 (with `MONGODB_URI` set) as the API behind it.
+
+## Frequently asked (about this build itself)
+
+**Does this need internet access to run?** No. After the one-time
+`npm install`, everything - fonts, icons, styling, the AI assistant, the
+compliance-score animation - runs from local code and local files.
+MongoDB is the only optional network dependency, and the app runs fully
+without it (see the table above). There is no step in normal usage of the
+site that calls out to the internet.
+
+**Is the AI assistant "real"?** Yes, in the sense that it is genuinely
+working software that reads your question, matches it against real site
+content, and returns a real answer plus real working navigation buttons -
+none of it is faked or hardcoded per-question. It is *not* a hosted large
+language model; it is a rule-based/retrieval engine (see
+`server/src/lib/assistantEngine.js`). This was a deliberate choice
+explained in full in `docs/design-and-research-report.md` section 6, not
+a shortcut: it means the assistant can never hallucinate a fake framework
+detail, at the cost of only being able to answer questions its intents
+cover.
 
 ## What's mocked vs. real
 

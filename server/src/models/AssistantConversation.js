@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+/**
+ * Stores AI assistant chat transcripts, keyed by a client-generated
+ * `sessionId` (see server/src/routes/assistant.js). Purely for
+ * quality/analytics purposes - logging failures never block a chat
+ * response, and the app works fine with this collection empty or with
+ * no database configured at all.
+ */
 const MessageSchema = new mongoose.Schema(
   {
     role: { type: String, enum: ["user", "assistant"], required: true },

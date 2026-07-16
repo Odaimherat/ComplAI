@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+/**
+ * A single contact-form / demo-request submission. Written by
+ * POST /api/contact (server/src/routes/contact.js). `status` is a manual
+ * field for whoever reviews leads in a database GUI (e.g. MongoDB
+ * Compass) - the app itself never changes it automatically.
+ */
 const ContactSubmissionSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 200 },

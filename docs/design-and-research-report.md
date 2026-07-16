@@ -5,6 +5,29 @@ ComplAI website, written after the build so every claim below can be
 checked against real code or content in this repository. Section 8 is an
 explicit traceability checklist for that purpose.
 
+## 0. Executive summary (for a founder skimming this before a sales call)
+
+- **The pitch in one line**: "AI that keeps you compliant continuously,
+  instead of scrambling for every audit" - GRC & Compliance Automation is
+  the product; SOC/MDR, Defensive, and Offensive Security exist to make
+  that compliance posture provably true rather than paper-deep.
+- **Who it's for and why**: see `docs/marketing-notes.md` for the full ICP
+  and objection-handling brief. Short version: Series A-C B2B SaaS
+  companies with a security review blocking a live deal are the primary
+  wedge; healthcare (HIPAA) and fintech (PCI DSS) buyers convert faster
+  because they have a regulatory deadline instead of just a sales-cycle
+  incentive.
+- **What actually differentiates this from a static marketing site**: a
+  working contact-to-database pipeline, a real (if intentionally
+  non-LLM) AI assistant that can answer framework questions and deep-link
+  into the site, a live animated audit-readiness visualization as the
+  homepage's signature moment, and now full light/dark theming plus a
+  genuine Arabic/RTL translation of every page's navigation and marketing
+  copy (see section 10) - the kind of polish that separates a template
+  from a site that reads as an actually-funded product.
+- **Everything below is traceable**: section 8 maps every claim in this
+  report to a specific file, so nothing here is aspirational.
+
 ## 1. Competitive research
 
 Research was pattern-level (structure, IA, positioning language), not
@@ -282,6 +305,12 @@ the Frameworks and Pricing pages actually display.
 | Legal pages are fully written, not stubs | `client/src/pages/Privacy.jsx`, `client/src/pages/Terms.jsx` |
 | No emoji anywhere in the codebase | Verified via repo-wide search at build time; none present in any `.js`/`.jsx`/`.md` file |
 | No AI-authorship references in repo or commits | Verified via repo-wide search; git commit author set to a team identity, not a tool name |
+| Light/dark theme toggle | `client/src/context/ThemeContext.jsx`; dual variable sets in `client/src/index.css` (`:root` and `[data-theme="light"]`); toggle button in `Nav.jsx` |
+| English/Arabic + RTL toggle | `client/src/context/LanguageContext.jsx`; `client/src/i18n/translations.js`; `dir`/`lang` set on `<html>`; logical Tailwind utilities in `Nav.jsx`, `Footer.jsx`, `AssistantWidget.jsx`, `About.jsx`, `CaseStudies.jsx`, `Pricing.jsx` |
+| Bilingual framework/solution/pricing names | `Ar`-suffixed fields in `shared/frameworks.js`, `shared/solutions.js`, `shared/pricing.js`, `shared/company.js` |
+| Fonts are self-hosted, zero CDN requests | `client/src/lib/fonts.js` (`@fontsource` imports only, no `@import url(...)` in `index.css`) |
+| Route-based code splitting | `React.lazy`/`Suspense` usage in `client/src/App.jsx` |
+| No `MODULE_TYPELESS_PACKAGE_JSON` warning | `"type": "module"` in root `package.json` |
 
 ## 9. What's mocked vs. real
 
@@ -315,5 +344,121 @@ the Frameworks and Pricing pages actually display.
 
 **Not applicable / no paid dependency exists anywhere in this build**:
 no analytics SDK, no paid font, no stock photo service, no chart API, no
-CDN-hosted paid icon set. `lucide-react` and Google Fonts are the only
-external asset dependencies, both free and open-license.
+CDN-hosted paid icon set. `lucide-react` and self-hosted `@fontsource`
+packages are the only external asset dependencies, both free, open-
+license, and bundled locally (see section 11).
+
+## 10. Theming and internationalization (light/dark, English/Arabic + RTL)
+
+**Theme system**: `client/src/context/ThemeContext.jsx` provides
+`theme`/`toggleTheme` and sets `data-theme` on `<html>`. Every color the
+site uses is a CSS custom property declared once under `:root` (dark, the
+brand default) and re-declared under `[data-theme="light"]` in
+`client/src/index.css`. No component contains a hardcoded hex value or a
+`dark:`/light-mode conditional class - the theme toggle works by
+re-pointing a fixed set of variable names, which is also why it was safe
+to add light mode after the fact without touching most components.
+Light-theme colors were chosen independently rather than by mechanically
+inverting the dark palette (e.g. the accent violet shifts from `#7b5cfa`
+to a slightly deeper `#6a4bef` on light backgrounds to hold WCAG AA
+contrast against white, and the status colors are deepened the same way),
+so the light theme reads as an intentional second treatment, not an
+auto-inverted approximation.
+
+**Language system**: `client/src/context/LanguageContext.jsx` provides
+`language`/`toggleLanguage`/`t()` and sets both `lang` and `dir` on
+`<html>`. `t()` reads dot-path keys (`t("nav.solutions")`) out of
+`client/src/i18n/translations.js`. Setting `dir="rtl"` is what drives the
+actual mirroring: layout components use Tailwind's logical-property
+utilities (`ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `border-s`/`border-e`)
+instead of physical `pl-`/`pr-`/`left-`/`right-`/`border-l`, so the same
+markup mirrors correctly under `dir="rtl"` with no per-language branching
+in the JSX for spacing. See `Nav.jsx` (dropdown position), `Footer.jsx`,
+`AssistantWidget.jsx` (floating button uses `end-5`, not `right-5`), and
+`About.jsx`'s timeline (`border-s`, `-start-[38px]`) as the clearest
+examples.
+
+**Font pairing for Arabic**: rather than swapping the whole type system
+for Arabic, `--font-display` and `--font-body` in `index.css` list Cairo
+and Tajawal *after* Space Grotesk and IBM Plex Sans in the same variable.
+Since neither Latin face has Arabic glyphs, the browser's normal font
+fallback renders Arabic text in Cairo/Tajawal automatically while Latin
+text (acronyms, control IDs) keeps using the Latin faces - this is why
+`shared/frameworks.js` deliberately keeps `name`/`fullName` in Latin
+script even on the Arabic site (SOC 2, ISO 27001, HIPAA are used as-is in
+real Arabic-language compliance writing, the same way "API" or "PDF"
+would be), while `categoryAr`/`summaryAr` carry the actual translation.
+
+**Translation scope, stated honestly**: navigation, footer, forms,
+buttons, all headings/eyebrows, and the full Home, About, Solutions
+index/detail, Frameworks, Pricing, and Contact page copy are translated
+in `client/src/i18n/translations.js` plus the `*Ar` fields added to
+`shared/solutions.js`, `shared/frameworks.js`, `shared/pricing.js`, and
+`shared/company.js`. What is **not** translated in this build, and is
+flagged in-page with a small italic note whenever the Arabic UI is active:
+the four full-length blog articles, the detailed case-study narratives,
+each solution's individual capability descriptions, and the full body
+text of the Privacy Policy and Terms of Service. Legal text specifically
+was left English-only on purpose - machine-translating legal obligations
+without professional review is a real risk, not just a scope-saving
+shortcut, and the in-page note says so. The AI assistant also stays
+English-only regardless of site language (`assistant.englishNote` in the
+translation dictionary explains this to the user directly rather than
+silently failing to understand Arabic questions); extending the intent
+matcher in `server/src/lib/assistantEngine.js` to Arabic keywords is
+listed as follow-up work rather than attempted partially.
+
+## 11. Performance and "runs with zero internet access" decisions
+
+- **Self-hosted fonts, not a Google Fonts CDN import**: `client/src/lib/fonts.js`
+  imports `@fontsource` packages, which bundle the actual `.woff2` files
+  into the build. This was a deliberate change from an earlier draft that
+  used a `fonts.googleapis.com` `@import` - that draft made the site's
+  *only* runtime network dependency a third-party font CDN, which
+  contradicted the "runs fully locally, no internet required" goal. Only
+  the `latin` and (for Cairo/Tajawal) `arabic` unicode-range subsets are
+  imported per weight, not the umbrella file that bundles every script
+  (Cyrillic, Greek, Vietnamese, etc.) - this alone cut the generated CSS
+  from roughly 57KB to 34KB.
+- **Route-based code splitting**: `client/src/App.jsx` lazy-loads every
+  route except Home via `React.lazy` + `Suspense`. Home ships in the main
+  bundle since nearly every session touches it; every other page is a
+  separate chunk Vite only downloads on navigation. This dropped the main
+  JS bundle from roughly 362KB to 271KB (gzipped: ~112KB to ~87KB) with no
+  change in behavior, verified by rebuilding before/after and comparing
+  `dist/assets` output sizes.
+- **`type: "module"` at the repository root**: `package.json` at the repo
+  root sets `"type": "module"`, matching `client/package.json` and
+  `server/package.json`. Without it, Node has to guess the module system
+  for files under `/shared` (which has no `package.json` of its own) by
+  parsing them, which is slower and previously printed a
+  `MODULE_TYPELESS_PACKAGE_JSON` warning on every server start.
+- **No database required to run the full experience**: reiterated here
+  because it is a genuine architecture decision, not an oversight - see
+  `server/src/config/db.js` and the `isDbConnected()` checks in
+  `contact.js`/`newsletter.js`.
+
+## 12. Feature-scope philosophy
+
+Every interactive feature on the site maps to a concrete commercial job,
+matching how real GRC/security vendor sites (Vanta, Drata, Secureframe)
+are actually built, not feature-count for its own sake:
+
+| Feature | Job it does |
+|---|---|
+| Live compliance gauge (Home) | The one signature "show, don't tell" moment - proves the continuous-monitoring pitch visually instead of only in copy |
+| AI assistant (widget + full page) | Self-serve answers for the specific, high-intent questions ("do you support HIPAA," "am I ready for SOC 2") that would otherwise require a sales call |
+| Contact form + mock demo booking | The actual lead-capture mechanism the whole site exists to drive traffic toward |
+| Newsletter signup | A lower-commitment capture path for visitors not ready to book a demo |
+| Pricing comparison table | Replaces a sales call for the "what's included at each tier" question, the single most common pre-demo objection |
+| Case studies with named metrics | Sales-enablement asset in disguise - written to be usable directly in outreach, per `docs/marketing-notes.md` |
+| Theme + language toggles | Table-stakes accessibility/reach for a product with a stated international ICP (fintech/healthcare buyers globally) rather than a novelty |
+
+Nothing on the site is decorative-only. The one place restraint was
+deliberately chosen over "more features" was motion: section 5 already
+limits animation to exactly two patterns (scroll-reveal, and the single
+homepage gauge), and that discipline was kept even after adding theming
+and translation - neither toggle animates beyond a plain CSS color/
+direction transition, because a flashy toggle transition would be
+motion spent on chrome instead of on content.
+

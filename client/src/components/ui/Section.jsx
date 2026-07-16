@@ -1,3 +1,12 @@
+/**
+ * Layout primitives used on every page.
+ *
+ * <Section> wraps a page block in consistent vertical padding and the
+ * shared 1280px max-width container. <SectionHeading> renders the
+ * eyebrow -> title -> description pattern used throughout the site, so
+ * that visual rhythm stays consistent from the homepage down to the
+ * legal pages without every page re-implementing its own heading markup.
+ */
 export function Section({ children, className = "", id }) {
   return (
     <section id={id} className={`py-20 md:py-28 ${className}`}>

@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * A newsletter subscription, written by POST /api/newsletter (see
+ * server/src/routes/newsletter.js). `email` is unique at the schema
+ * level so a duplicate signup is a no-op rather than a second row.
+ */
 const NewsletterSignupSchema = new mongoose.Schema(
   {
     email: {
