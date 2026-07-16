@@ -8,6 +8,9 @@ import { connectDB } from "./config/db.js";
 import contactRouter from "./routes/contact.js";
 import newsletterRouter from "./routes/newsletter.js";
 import assistantRouter from "./routes/assistant.js";
+import adminAuthRouter from "./routes/adminAuth.js";
+import adminRouter from "./routes/admin.js";
+import billingRouter from "./routes/billing.js";
 
 dotenv.config();
 
@@ -35,6 +38,9 @@ app.get("/api/health", (req, res) => {
 app.use("/api/contact", contactRouter);
 app.use("/api/newsletter", newsletterRouter);
 app.use("/api/assistant", assistantRouter);
+app.use("/api/admin/auth", adminAuthRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/billing", billingRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Not found." });
