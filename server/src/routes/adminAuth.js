@@ -1,6 +1,8 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
+import AuditLog from "../models/AuditLog.js";
+import { isDbConnected } from "../config/db.js";
 
 const router = Router();
 
@@ -39,16 +41,29 @@ const loginLimiter = rateLimit({
   message: { error: "Too many login attempts. Try again in a few minutes." },
 });
 
-router.post("/login", loginLimiter, (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   const { password } = req.body || {};
+  const ip = req.ip;
 
   if (typeof password !== "string" || password !== ADMIN_PASSWORD) {
+    logAudit("login_failure", ip, "Failed admin login attempt.");
     return res.status(401).json({ error: "Incorrect password." });
   }
 
+  logAudit("login_success", ip, "Admin signed in.");
   const token = jwt.sign({ role: "admin" }, JWT_SECRET, { expiresIn: TOKEN_TTL });
   return res.json({ token, expiresIn: TOKEN_TTL });
 });
+
+/** Best-effort audit write - never throws, never blocks the calling route. */
+export async function logAudit(action, ip, detail, metadata) {
+  if (!isDbConnected()) return;
+  try {
+    await AuditLog.create({ action, ip, detail, metadata });
+  } catch (err) {
+    console.error("[admin] failed to write audit log:", err.message);
+  }
+}
 
 /** Express middleware: verifies the Bearer token on protected admin routes. */
 export function requireAdmin(req, res, next) {

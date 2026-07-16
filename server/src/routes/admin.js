@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { requireAdmin } from "./adminAuth.js";
+import { requireAdmin, logAudit } from "./adminAuth.js";
 import ContactSubmission from "../models/ContactSubmission.js";
 import NewsletterSignup from "../models/NewsletterSignup.js";
 import AssistantConversation from "../models/AssistantConversation.js";
 import Subscription from "../models/Subscription.js";
+import AuditLog from "../models/AuditLog.js";
 import { isDbConnected } from "../config/db.js";
 
 const router = Router();
@@ -104,8 +105,17 @@ router.patch("/leads/:id", async (req, res) => {
   if (!isDbConnected()) return res.status(503).json({ error: "No database configured." });
 
   try {
+    const previous = await ContactSubmission.findById(req.params.id).lean();
     const updated = await ContactSubmission.findByIdAndUpdate(req.params.id, { status }, { new: true });
     if (!updated) return res.status(404).json({ error: "Lead not found." });
+
+    logAudit(
+      "lead_status_change",
+      req.ip,
+      `Lead ${updated.email} status: ${previous?.status || "unknown"} -> ${status}`,
+      { leadId: String(updated._id), previousStatus: previous?.status, newStatus: status }
+    );
+
     return res.json({ ok: true, lead: updated });
   } catch (err) {
     console.error("[admin] lead update failed:", err.message);
@@ -134,6 +144,18 @@ router.get("/subscriptions", async (req, res) => {
   } catch (err) {
     console.error("[admin] subscriptions query failed:", err.message);
     return res.status(500).json({ error: "Failed to load subscriptions." });
+  }
+});
+
+/** GET /api/admin/audit-log - most recent admin actions, newest first. */
+router.get("/audit-log", async (req, res) => {
+  if (!isDbConnected()) return res.json({ ...NO_DB_RESPONSE, entries: [] });
+  try {
+    const entries = await AuditLog.find().sort({ createdAt: -1 }).limit(200).lean();
+    return res.json({ connected: true, entries });
+  } catch (err) {
+    console.error("[admin] audit log query failed:", err.message);
+    return res.status(500).json({ error: "Failed to load audit log." });
   }
 });
 
