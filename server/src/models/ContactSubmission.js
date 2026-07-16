@@ -15,7 +15,7 @@ const ContactSubmissionSchema = new mongoose.Schema(
     frameworksOfInterest: [{ type: String, trim: true }],
     message: { type: String, required: true, maxlength: 5000 },
     requestedDemo: { type: Boolean, default: false },
-    demoSlot: { type: String, trim: true }, // mock "book a demo" slot label, e.g. "Tue Jul 21, 2:00 PM"
+    preferredSlot: { type: String, trim: true }, // ISO-ish label the visitor picked in the calendar UI, e.g. "Tue, Jul 21 - 2:00 PM"
     status: {
       type: String,
       enum: ["new", "contacted", "closed"],
