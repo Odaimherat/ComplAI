@@ -1,13 +1,35 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 
 /*
-  Design tokens for ComplAI.
-  See /docs/design-and-research-report.md, section 4, for the full
-  rationale behind this palette and type system.
+  ============================================================================
+  ComplAI design tokens
+  ============================================================================
+  See /docs/design-and-research-report.md section 4 for the full rationale.
+
+  Theming: every color is a CSS custom property under :root (the dark
+  theme, which is the brand default) and re-declared under
+  [data-theme="light"]. Components never hardcode a hex value - they use
+  `var(--color-*)`, so switching the `data-theme` attribute on <html>
+  (see src/context/ThemeContext.jsx) re-themes the entire app instantly
+  with no per-component logic required.
+
+  Language/direction: the Arabic translation (see src/context/
+  LanguageContext.jsx and src/i18n/translations.js) sets `dir="rtl"` and
+  `lang="ar"` on <html>. Font stacks below list the Arabic face *after*
+  the Latin face in the same variable, so Latin text (control IDs,
+  acronyms like "SOC 2") keeps rendering in the Latin face even inside an
+  Arabic-language page, while Arabic glyphs automatically fall through to
+  Cairo/Tajawal, which do include those glyphs.
+  ============================================================================
 */
 @theme {
-  /* Surfaces (dark-mode-first) */
+  --font-display: "Space Grotesk", "Cairo", "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", "Tajawal", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  /* Surfaces (dark theme - the brand default) */
   --color-bg: #0a0e13;
   --color-bg-raised: #10151c;
   --color-surface: #141a22;
@@ -23,20 +45,45 @@
   /* Brand accent: Signal Violet, used with restraint */
   --color-accent: #7b5cfa;
   --color-accent-strong: #9580ff;
-  --color-accent-soft: #7b5cfa1a;
+  --color-accent-soft: rgba(123, 92, 250, 0.1);
 
   /* Status palette - the literal vocabulary of a compliance dashboard */
   --color-pass: #2ed3a3;
-  --color-pass-soft: #2ed3a31a;
+  --color-pass-soft: rgba(46, 211, 163, 0.1);
   --color-warn: #f5a623;
-  --color-warn-soft: #f5a6231a;
+  --color-warn-soft: rgba(245, 166, 35, 0.1);
   --color-fail: #f0546b;
-  --color-fail-soft: #f0546b1a;
+  --color-fail-soft: rgba(240, 84, 107, 0.1);
 
-  /* Type */
-  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
-  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --color-bg: #f6f7f9;
+  --color-bg-raised: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef0f4;
+  --color-border: #e2e6eb;
+  --color-border-strong: #c7cdd6;
+
+  --color-text: #12161d;
+  --color-text-muted: #545f6c;
+  --color-text-faint: #8994a1;
+
+  --color-accent: #6a4bef;
+  --color-accent-strong: #5637d6;
+  --color-accent-soft: rgba(106, 75, 239, 0.08);
+
+  --color-pass: #14966f;
+  --color-pass-soft: rgba(20, 150, 111, 0.09);
+  --color-warn: #b96a05;
+  --color-warn-soft: rgba(185, 106, 5, 0.09);
+  --color-fail: #d0324c;
+  --color-fail-soft: rgba(208, 50, 76, 0.09);
+
+  --shadow-card: 0 1px 3px rgba(20, 22, 30, 0.08);
+  color-scheme: light;
 }
 
 * {
@@ -53,6 +100,13 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Arabic reads noticeably better a touch larger and with slightly looser
+   line height, since Tajawal's x-height differs from IBM Plex Sans. */
+[dir="rtl"] body {
+  line-height: 1.85;
 }
 
 ::selection {
@@ -77,6 +131,14 @@ body {
 .font-display { font-family: var(--font-display); }
 .font-mono { font-family: var(--font-mono); }
 
+/* Numbers and control IDs stay left-to-right and in the mono face even
+   inside an RTL page - this mirrors how real audit tooling renders
+   identifiers regardless of document language. */
+.font-mono {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
 .container-page {
   max-width: 1280px;
   margin: 0 auto;
@@ -95,6 +157,7 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 14px;
+  box-shadow: var(--shadow-card);
 }
 
 .btn {
@@ -141,15 +204,35 @@ body {
   transform: translateY(0);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-accent-strong);
+}
+[dir="rtl"] .eyebrow {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.input {
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  outline: none;
+  font-family: inherit;
+}
+.input:focus {
+  border-color: var(--color-accent-strong);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
