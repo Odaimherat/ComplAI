@@ -311,6 +311,18 @@ the Frameworks and Pricing pages actually display.
 | Fonts are self-hosted, zero CDN requests | `client/src/lib/fonts.js` (`@fontsource` imports only, no `@import url(...)` in `index.css`) |
 | Route-based code splitting | `React.lazy`/`Suspense` usage in `client/src/App.jsx` |
 | No `MODULE_TYPELESS_PACKAGE_JSON` warning | `"type": "module"` in root `package.json` |
+| Admin dashboard uses real signed JWTs and real Mongo aggregation | `server/src/routes/adminAuth.js`, `server/src/routes/admin.js` |
+| Admin login has a dedicated, stricter rate limit | `loginLimiter` in `server/src/routes/adminAuth.js` |
+| Every admin action is audit-logged | `server/src/models/AuditLog.js`, `logAudit()` calls in `adminAuth.js` and `admin.js`, "Audit Log" tab in `AdminDashboard.jsx` |
+| Checkout never stores full card numbers or CVCs | `server/src/routes/billing.js` (`cardLast4`/`cardBrand` only, Luhn check, expiry check) |
+| Checkout is fully client+server validated, not just client-side | Server-side checks in `billing.js` independent of the client form in `Checkout.jsx` |
+| Trust Center content is illustrative, labeled as such | In-page note in `TrustCenter.jsx`, doc comment on `SUB_PROCESSORS` |
+| Framework comparison reuses the single content source | `FrameworkCompare.jsx` imports from `shared/frameworks.js`, same as `Frameworks.jsx` and the assistant |
+| Demo slot is visitor-chosen, not server-random | `DemoSlotPicker.jsx` + `preferredSlot` validation in `contact.js` |
+| Newsletter is double opt-in, verification link shown not emailed | `server/src/routes/newsletter.js` (`verifyUrl` in the response), `Footer.jsx`, `NewsletterVerify.jsx` |
+| OG image is a real designed asset, not a placeholder | `client/public/og-image-source.svg` (source), `og-image.png` (rasterized), referenced in `index.html` |
+| `theme-color` is genuinely OS-theme-responsive; `og:image` is not (and can't be) | `media="(prefers-color-scheme: ...)"` meta tags in `index.html`, with rationale in the surrounding HTML comment |
+| Avatars/logos are generated, not stock photos or real brand marks | `AvatarArt.jsx` (hash-seeded), `CustomerLogos.jsx` (fictional case-study companies only) |
 
 ## 9. What's mocked vs. real
 
@@ -453,6 +465,12 @@ are actually built, not feature-count for its own sake:
 | Pricing comparison table | Replaces a sales call for the "what's included at each tier" question, the single most common pre-demo objection |
 | Case studies with named metrics | Sales-enablement asset in disguise - written to be usable directly in outreach, per `docs/marketing-notes.md` |
 | Theme + language toggles | Table-stakes accessibility/reach for a product with a stated international ICP (fintech/healthcare buyers globally) rather than a novelty |
+| Admin dashboard | Turns "there's a backend" into "there's an operable internal tool" - the same lead/newsletter/subscription data the marketing site collects, with real Mongo aggregation and an accountable audit trail |
+| Mock checkout | Demonstrates the full commercial loop (pricing -> payment -> confirmation), not just a pricing table that dead-ends at a contact form |
+| Trust Center | The specific artifact a security-conscious buyer's reviewer asks for before a deal closes - a real pattern at Vanta/Drata, not a novelty page |
+| Framework comparison tool | Answers "how much overlap is there between X and Y for us," the actual question a multi-framework buyer has, which the single-framework detail view on `/frameworks` doesn't answer |
+| Calendar demo picker | Replaces a server-random time slot with one the visitor actually chooses - a small but real UX correctness fix, not just a visual upgrade |
+| Newsletter double opt-in | The standard, expected pattern for any real newsletter signup; skipping it would have been the actual shortcut |
 
 Nothing on the site is decorative-only. The one place restraint was
 deliberately chosen over "more features" was motion: section 5 already
@@ -461,4 +479,96 @@ homepage gauge), and that discipline was kept even after adding theming
 and translation - neither toggle animates beyond a plain CSS color/
 direction transition, because a flashy toggle transition would be
 motion spent on chrome instead of on content.
+
+## 13. Later additions: admin tooling, commercial flows, and Trust Center
+
+Added after the initial build and the theming/i18n work, in response to
+a specific ask for features that "show more capability" without adding
+paid dependencies. Documented here for the same traceability reason as
+everything else in this report.
+
+**Admin dashboard** (`/admin/login` -> `/admin/dashboard`, linked quietly
+from the footer). Real signed JWTs (`server/src/routes/adminAuth.js`),
+a dedicated rate limiter on the login route separate from the generous
+global API limiter (10 attempts/15min vs. 120 req/15min - see the doc
+comment in that file for why the global limiter alone doesn't meaningfully
+protect a password endpoint), and Mongo aggregation queries (not
+in-memory reduction) for the stats view. Charts are hand-built SVG
+(`client/src/components/ui/charts/`), not a charting library - two small
+bar/line charts didn't justify the dependency weight. Auth is
+single-admin-password by design, not a real multi-user system; the doc
+comment in `adminAuth.js` states exactly what a production version would
+need instead (per-user accounts, bcrypt, a real secrets manager for
+`JWT_SECRET`).
+
+**Admin audit log** (`server/src/models/AuditLog.js`, the "Audit Log" tab
+in the dashboard). Every login attempt (success and failure) and every
+lead status change is recorded with actor, IP, and a human-readable
+detail line. Writing an audit entry is a fire-and-forget best-effort
+call (`logAudit()`), matching the pattern used elsewhere in this codebase
+for non-critical writes (e.g. assistant conversation logging) - an audit
+write failure should never break the action it's recording.
+
+**Mock checkout** (`/checkout/:planId`, `server/src/routes/billing.js`).
+Real client- and server-side validation, including a Luhn checksum on
+the card number and an expiry-date check, but no payment processor is
+ever contacted. Only card brand and last 4 digits are ever persisted -
+never the full number or CVC, which mirrors an actual PCI DSS
+requirement and is a small piece of intentional dogfooding for a
+compliance company's own checkout page. The route's doc comment states
+exactly what a Stripe PaymentIntents integration would replace.
+
+**Trust Center** (`/trust-center`). Status, certifications, and
+sub-processor list - the standard artifact security-conscious buyers'
+reviewers ask for, published the way Vanta and Drata actually publish
+theirs, so a prospect can self-serve instead of waiting on an email
+thread.
+
+**Framework comparison tool** (`/frameworks/compare`,
+`client/src/pages/FrameworkCompare.jsx`). Client-side only, no new API -
+it operates on the same `shared/frameworks.js` data every other
+framework-related page and the assistant already use.
+
+**Calendar-style demo scheduling** (`client/src/components/
+DemoSlotPicker.jsx`). Replaced an earlier version of the contact flow
+where the server picked a random time slot after submission with one
+where the visitor picks a real weekday/time slot client-side; the server
+now validates that a demo request includes a slot rather than generating
+one itself (`server/src/routes/contact.js`).
+
+**Newsletter double opt-in** (`server/src/routes/newsletter.js`,
+`/newsletter/verify/:token`). A signup starts unverified with a random
+token; since no real email provider is connected, the "sent"
+confirmation link is returned directly in the API response and shown
+inline in the footer form (`client/src/components/Footer.jsx`) labeled
+as demo mode, rather than the site pretending an email was delivered
+somewhere nobody can see it.
+
+**Open Graph / social card** (`client/index.html`,
+`client/public/og-image.png`). A custom-designed 1200x630 image (source
+SVG at `client/public/og-image-source.svg`, rasterized with `sharp` at
+build time) rather than a placeholder, plus full `og:`/`twitter:` meta
+tags. Worth being precise about the "dark/light-aware" framing this was
+requested under: social crawlers fetch `og:image` server-side with no
+JavaScript execution and no concept of a viewer's theme, so a single
+static image is the correct answer, not a limitation to work around -
+what genuinely *is* theme-aware is the `theme-color` meta tag, which now
+has separate dark/light values using the `media` attribute and is
+respected by browsers that support it (Chrome, Safari) based on the
+visitor's actual OS/browser preference.
+
+**Illustrated avatars and customer logos** (`client/src/components/
+AvatarArt.jsx`, `CustomerLogos.jsx`). Deterministic geometric avatars
+generated from a hash of each person's name (so the same person always
+renders the same avatar) rather than stock photos or generated faces,
+and simple wordmark logos for the fictional case-study companies rather
+than any real, trademarked brand marks.
+
+**Arabic translation extended** to the pages above that postdate the
+original i18n work (checkout, Trust Center, global search) - see section
+10 for the original translation-scope decisions, which this extends
+rather than replaces. The admin dashboard remains intentionally English-
+only: real internal ops tooling is almost always single-language
+regardless of a product's customer-facing locales, and treating it
+differently here would have been scope for its own sake.
 
