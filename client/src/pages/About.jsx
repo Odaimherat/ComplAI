@@ -3,6 +3,7 @@ import { Section, SectionHeading } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import { useLanguage } from "../context/LanguageContext";
 import ShieldNetworkArt from "../components/ShieldNetworkArt";
+import AvatarArt from "../components/AvatarArt";
 
 export default function About() {
   const { t, language } = useLanguage();
@@ -73,9 +74,7 @@ export default function About() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {leadership.map((l) => (
             <div key={l.name} className="card p-6">
-              <div className="w-12 h-12 rounded-full bg-[var(--color-accent-soft)] flex items-center justify-center font-display font-semibold text-[var(--color-accent-strong)] mb-4">
-                {l.name.split(" ").map((n) => n[0]).join("")}
-              </div>
+              <AvatarArt seed={l.name} size={56} className="mb-4" />
               <h3 className="font-display font-semibold">{l.name}</h3>
               <p className="text-xs font-mono text-[var(--color-accent-strong)] mb-3">{l.role}</p>
               <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">{l.bio}</p>

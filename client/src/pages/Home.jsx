@@ -4,6 +4,7 @@ import { solutions, trustStats, testimonials } from "../data/content";
 import { Section, SectionHeading } from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import ComplianceLiveDemo from "../components/ComplianceLiveDemo";
+import CustomerLogos from "../components/CustomerLogos";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Home() {
@@ -52,7 +53,7 @@ export default function Home() {
 
       {/* Trust bar */}
       <Section className="py-14 border-b border-[var(--color-border)]">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {trustStats.map((s) => (
             <div key={s.label} className="text-center md:text-start">
               <p className="font-display text-3xl md:text-4xl font-semibold text-[var(--color-text)]" dir="ltr">{s.value}</p>
@@ -60,6 +61,8 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <p className="eyebrow text-center mb-6">Trusted by compliance teams at</p>
+        <CustomerLogos />
       </Section>
 
       {/* Product pillars, GRC first */}
