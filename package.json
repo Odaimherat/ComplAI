@@ -13,5 +13,6 @@
   "private": "true",
   "devDependencies": {
     "concurrently": "^10.0.3"
-  }
+  },
+  "type": "module"
 }
